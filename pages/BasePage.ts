@@ -47,15 +47,20 @@ export class BasePage {
   }
 
   // Dismiss cookie/ad overlays that may block interactions
-  async dismissOverlays() {
+async dismissOverlays() {
+  // consent banner
   const consentBtn = this.page.locator('button:has-text("Consent")');
-  const isVisible = await consentBtn.isVisible({ timeout: 5000 }).catch(() => false);
-  
-  if (isVisible) {
+  const isConsentVisible = await consentBtn.isVisible({ timeout: 2000 }).catch(() => false);
+  if (isConsentVisible) {
     await consentBtn.click();
   }
-  // if not visible, silently continue — banner wasn't present
-  
+
+  // Google survey overlay
+  const surveyClose = this.page.locator('text=Close');
+  const isSurveyVisible = await surveyClose.isVisible({ timeout: 2000 }).catch(() => false);
+  if (isSurveyVisible) {
+    await surveyClose.click();
+  }
 }
 async subscribeToNewsletter(email: string) {
 await this.page.evaluate(() => {

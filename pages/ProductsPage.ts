@@ -47,8 +47,9 @@ async addFirstProductToCart() {
 }
 
   async viewFirstProduct() {
-    await this.firstProductViewButton.click();
-  }
+  await this.firstProductViewButton.click();
+  await this.dismissOverlays();
+}
 
 async dismissAddedToCartModal() {
   const continueBtn = this.page.locator('button:has-text("Continue Shopping")');

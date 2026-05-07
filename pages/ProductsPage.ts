@@ -9,6 +9,7 @@ export class ProductsPage extends BasePage {
   readonly productCards: Locator;
   readonly searchedProductsHeader: Locator;
   readonly firstProductViewButton: Locator;
+  readonly addToCartButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -17,6 +18,7 @@ export class ProductsPage extends BasePage {
     this.productCards = page.locator('.productinfo');
     this.searchedProductsHeader = page.locator('h2:has-text("Searched Products")');
     this.firstProductViewButton = page.locator('a:has-text("View Product")').first();
+    this.addToCartButton = page.locator('button:has-text("Add to cart")');
   }
 
   async goto() {
@@ -54,5 +56,9 @@ async addFirstProductToCart() {
 async dismissAddedToCartModal() {
   const continueBtn = this.page.locator('button:has-text("Continue Shopping")');
   await continueBtn.click();
+}
+
+async expectAddToCartVisible() {
+  await expect(this.addToCartButton).toBeVisible(); 
 }
 }

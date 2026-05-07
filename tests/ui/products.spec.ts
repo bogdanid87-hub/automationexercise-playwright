@@ -33,6 +33,21 @@ test.describe('Products', () => {
     await expect(page.locator('button:has-text("Add to cart")')).toBeVisible();
   });
 
+  test('should add product to cart from detail page', async ({ productsPage, cartPage }) => {
+    await productsPage.goto();
+    await productsPage.viewFirstProduct();
+    await productsPage.expectAddToCartVisible();
+
+    await productsPage.addToCartButton.click();
+
+    // Dismiss the success modal
+    await productsPage.dismissAddedToCartModal();
+
+    await cartPage.goto();
+    const itemCount = await cartPage.getItemCount();
+    expect(itemCount).toBeGreaterThanOrEqual(1);
+  });
+
   test('should add a product to cart', async ({ productsPage, cartPage }) => {
     await productsPage.goto();
     await productsPage.addFirstProductToCart();
@@ -45,4 +60,4 @@ test.describe('Products', () => {
     const itemCount = await cartPage.getItemCount();
     expect(itemCount).toBeGreaterThanOrEqual(1);
   });
-});
+});   

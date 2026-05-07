@@ -1,7 +1,7 @@
 // pages/BasePage.ts
 // All page objects extend this — shared nav, header interactions, and utility methods
 
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 
 export class BasePage {
   protected readonly page: Page;
@@ -14,6 +14,10 @@ export class BasePage {
   readonly navLogout: Locator;
   readonly navDeleteAccount: Locator;
   readonly loggedInAsText: Locator;
+  readonly navContactUs: Locator;
+  readonly subscriptionEmail: Locator;
+  readonly subscriptionButton: Locator;
+  readonly subscriptionSuccessMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -24,6 +28,10 @@ export class BasePage {
     this.navLogout = page.locator('a[href="/logout"]');
     this.navDeleteAccount = page.locator('a[href="/delete_account"]');
     this.loggedInAsText = page.locator('li:has-text("Logged in as")');
+    this.navContactUs = page.locator('a[href="/contact_us"]');
+    this.subscriptionEmail = page.locator('#susbscribe_email');
+    this.subscriptionButton = page.locator('#subscribe');
+    this.subscriptionSuccessMessage = page.locator('#success-subscribe');
   }
 
   async navigate(path: string = '/') {
@@ -39,7 +47,7 @@ export class BasePage {
   }
 
   // Dismiss cookie/ad overlays that may block interactions
-async dismissOverlays() {
+  async dismissOverlays() {
   const consentBtn = this.page.locator('button:has-text("Consent")');
   const isVisible = await consentBtn.isVisible({ timeout: 5000 }).catch(() => false);
   
@@ -47,5 +55,29 @@ async dismissOverlays() {
     await consentBtn.click();
   }
   // if not visible, silently continue — banner wasn't present
+  
 }
+async subscribeToNewsletter(email: string) {
+await this.page.evaluate(() => {
+  (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
+});
+  await this.page.waitForTimeout(500);
+  await this.subscriptionEmail.fill(email);
+  await this.subscriptionButton.click();
+}
+
+  async expectSubscriptionSuccess() {
+    await this.subscriptionSuccessMessage.waitFor({ state: 'visible', timeout: 2000 });
+    await expect(this.subscriptionSuccessMessage).toHaveText('You have been successfully subscribed!'); 
+    await this.subscriptionSuccessMessage.waitFor({ state: 'hidden', timeout: 2000 }); // Wait for the message to disappear
+  }
+  async expectSubscriptionMissingEmailError() {
+    await expect(this.subscriptionEmail).toHaveAttribute('type', 'email');
+    await expect(this.subscriptionEmail).toHaveJSProperty('validity.valueMissing', true); 
+    await expect(this.subscriptionEmail).toHaveAttribute('required');
+  }
+  async expectSubscriptionInvalidEmailError() {
+    await expect(this.subscriptionEmail).toHaveAttribute('type', 'email');
+    await expect(this.subscriptionEmail).toHaveJSProperty('validity.typeMismatch', true);
+  }
 }

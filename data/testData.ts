@@ -28,7 +28,6 @@ export const USERS = {
   existing: {
     email: process.env.TEST_USER_EMAIL ?? 'testuser@example.com',
     password: process.env.TEST_USER_PASSWORD ?? 'Test@1234',
-    name: process.env.TEST_USER_NAME ?? 'Test User',
   },
   // Dynamically generated user for registration tests
   newUser: () => {

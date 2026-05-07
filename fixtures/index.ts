@@ -8,6 +8,7 @@ import { ProductsPage } from '../pages/ProductsPage';
 import { CartPage } from '../pages/CartPage';
 import { ApiClient } from '../api/ApiClient';
 import { USERS } from '../data/testData';
+import { ContactPage } from '../pages/ContactPage';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -16,6 +17,7 @@ type Fixtures = {
   cartPage: CartPage;
   apiClient: ApiClient;
   authenticatedPage: LoginPage; // loginPage with user already logged in
+  contactPage: ContactPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -45,6 +47,10 @@ export const test = base.extend<Fixtures>({
     await loginPage.goto();
     await loginPage.login(USERS.existing.email, USERS.existing.password);
     await use(loginPage);
+  },
+
+  contactPage: async ({ page }, use) => {
+    await use(new ContactPage(page));
   },
 });
 

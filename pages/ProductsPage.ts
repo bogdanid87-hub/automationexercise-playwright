@@ -36,15 +36,11 @@ export class ProductsPage extends BasePage {
   }
 
 async addFirstProductToCart() {
-  // scroll past the heading first
-  await this.searchedProductsHeader.scrollIntoViewIfNeeded();
-  await this.page.waitForTimeout(500);
-  
-  // now hover and click
-  await this.productCards.first().hover();
   const addToCartBtn = this.page
     .locator('.overlay-content a:has-text("Add to cart")')
     .first();
+  
+  await this.productCards.first().hover();
   await addToCartBtn.scrollIntoViewIfNeeded();
   await this.page.waitForTimeout(500);
   await addToCartBtn.click();

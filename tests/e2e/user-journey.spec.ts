@@ -64,6 +64,9 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     const uiResultCount = await productsPage.getProductCount();
     expect(uiResultCount).toBeGreaterThan(0);
 
+    // scroll past search heading first since we just did a search
+    await productsPage.searchedProductsHeader.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(500);
     await productsPage.addFirstProductToCart();
     const continueBtn = page.locator('button:has-text("Continue Shopping")');
     await continueBtn.click();

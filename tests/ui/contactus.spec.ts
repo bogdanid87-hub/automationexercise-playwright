@@ -3,6 +3,7 @@
 import { test, expect } from '../../fixtures';
 import { CONTACT_US } from '../../data/testData';
 
+
 test.describe('Contact Us', () => {
 
   test('should submit contact form successfully', async ({ contactPage }) => {
@@ -23,10 +24,10 @@ test.describe('Contact Us', () => {
       await contactPage.setupDialogHandler();
 
       await contactPage.submitContactForm(
-          CONTACT_US.missingEmail.name,
-          CONTACT_US.missingEmail.email,
-          CONTACT_US.missingEmail.subject,
-          CONTACT_US.missingEmail.message
+        CONTACT_US.valid.name,
+        '', // Missing email    
+        CONTACT_US.valid.subject,
+        CONTACT_US.valid.message
           );
       await contactPage.expectValidationError();
     });
@@ -36,10 +37,10 @@ test.describe('Contact Us', () => {
       await contactPage.setupDialogHandler();
 
       await contactPage.submitContactForm(
-          CONTACT_US.invalidEmail.name,
-          CONTACT_US.invalidEmail.email,
-          CONTACT_US.invalidEmail.subject,
-          CONTACT_US.invalidEmail.message
+        CONTACT_US.valid.name,
+        CONTACT_US.invalidEmail.email,
+        CONTACT_US.valid.subject,
+        CONTACT_US.valid.message
           );
       await contactPage.expectInvalidEmailError();
     });
@@ -49,12 +50,12 @@ test.describe('Contact Us', () => {
       await contactPage.setupDialogHandler();
 
       await contactPage.submitContactForm(
-          CONTACT_US.validUpload.name,
-          CONTACT_US.validUpload.email,
-          CONTACT_US.validUpload.subject,
-          CONTACT_US.validUpload.message,
-          CONTACT_US.validUpload.filePath
-          );
+        CONTACT_US.valid.name,
+        CONTACT_US.valid.email,
+        CONTACT_US.valid.subject,
+        CONTACT_US.valid.message,
+        CONTACT_US.valid.filePath
+        );
       await contactPage.expectSuccessMessage();
     });
 });

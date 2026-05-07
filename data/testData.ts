@@ -74,24 +74,8 @@ export const CONTACT_US = {
     email: 'fakeemail@example.com',
     subject: 'Test Subject',
     message: 'Test Message',
-  },
-  missingEmail: {
-    name: 'John Doe',
-    email: '',
-    subject: 'Test Subject',
-    message: 'Test Message',
-  },
-  invalidEmail: {
-    name: 'John Doe',
-    email: 'invalid-email',
-    subject: 'Test Subject',
-    message: 'Test Message',
-  },
-  validUpload: {
-    name: 'John Doe',
-    email: 'fakeemail@example.com',
-    subject: 'Test Subject',
-    message: 'Test Message',
     filePath: 'fixtures/testfile.txt', // Ensure this file exists 
   },
+  invalidEmail: {
+    email: 'invalid-email',}
 } as const;

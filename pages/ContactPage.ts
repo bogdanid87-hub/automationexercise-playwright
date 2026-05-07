@@ -42,7 +42,7 @@ export class ContactPage extends BasePage {
       await this.contactUploadFile.setInputFiles(filePath);
     }
     await this.contactSubmitButton.click();
-    await this.setupDialogHandler();
+    //await this.setupDialogHandler();
   }
 
   async expectSuccessMessage() {
@@ -52,7 +52,6 @@ export class ContactPage extends BasePage {
   async expectValidationError() {
     await expect(this.contactEmail).toHaveAttribute('type', 'email');
     await expect(this.contactEmail).toHaveJSProperty('validity.valueMissing', true); 
-   // await expect(this.contactEmail).toHaveJSProperty('validity.typeMismatch', true);
     await expect(this.contactEmail).toHaveAttribute('required');
   }
  async expectInvalidEmailError() {

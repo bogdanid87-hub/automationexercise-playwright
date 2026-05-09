@@ -9,6 +9,7 @@ export const URLS = {
   cart: '/view_cart',
   checkout: '/checkout',
   contactUs: '/contact_us',
+  paymentDone: '/payment_done',
 } as const;
 
 export const API = {
@@ -77,4 +78,12 @@ export const CONTACT_US = {
   },
   invalidEmail: {
     email: 'invalid-email',}
+} as const;
+
+export const PAYMENT = {
+  nameOnCard: 'John Doe',
+  cardNumber: '4111111111111111', // Visa test card number
+  cvc: '123',
+  expiryMonth: '12',
+  expiryYear: '2025',
 } as const;

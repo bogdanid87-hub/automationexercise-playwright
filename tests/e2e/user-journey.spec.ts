@@ -6,20 +6,23 @@
 //   1. Create a user via API (fast, no UI overhead)
 //   2. Log in via the UI
 //   3. Search and add a product to cart via the UI
-//   4. Verify the product exists in the API's product list
-//   5. Confirm the logged-in state matches the API user record
-//   6. Cleanup via API
+//   4. Complete checkout and payment via the UI
+//   5. Validate order success message and download invoice via the UI
+//   6. Cross-validate product search results via API
+//   7. Cross-validate user details via API
+//   8. Cleanup by deleting the user via API
 //
 // This pattern (API setup → UI journey → API assertion → API teardown) is
 // exactly what senior QA engineers do in production fintech test suites.
 
 import { test, expect } from '../../fixtures';
-import { USERS } from '../../data/testData';
+import { PAYMENT, USERS } from '../../data/testData';
 import { LoginPage } from '../../pages/LoginPage';
 import { ProductsPage } from '../../pages/ProductsPage';
 import { CartPage } from '../../pages/CartPage';
 import { CheckoutPage } from '../../pages/CheckoutPage';
 import { PaymentPage } from '../../pages/PaymentPage';
+import { OrderPlacedPage } from '../../pages/OrderPlacedPage';
 
 test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
 
@@ -106,11 +109,38 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     await checkoutPage.enterOrderMessage('Please deliver between 9 AM and 5 PM.');
     await checkoutPage.placeOrder();
 
+    // ── Step 5: UI — enter payment details and submit ─────────────────────────────
     const paymentPage = new PaymentPage(page);
     await paymentPage.goto();
    
+    await paymentPage.enterPaymentDetails(
+      PAYMENT.nameOnCard,
+      PAYMENT.cardNumber,
+      PAYMENT.cvc,
+      PAYMENT.expiryMonth,
+      PAYMENT.expiryYear
+    );
+    await paymentPage.submitPayment();
 
-    // ── Step 5: API cross-validation — confirm same search term returns results ─
+    const orderPlacedPage = new OrderPlacedPage(page);
+    await expect(orderPlacedPage.orderConfirmationTitle).toBeVisible();
+    await expect(orderPlacedPage.orderConfirmationMessage).toBeVisible();
+
+    // verify invoice download by checking the file system for the downloaded file
+    const downloadPromise = page.waitForEvent('download');
+    await orderPlacedPage.downloadInvoice();
+    const download = await downloadPromise;
+
+    // assert the filename
+    expect(download.suggestedFilename()).toContain('invoice');
+
+    // assert the file actually has content
+    const path = await download.path();
+    expect(path).toBeTruthy();
+
+    await orderPlacedPage.continueShopping();
+
+    // ── Step 6: API cross-validation — confirm same search term returns results ─
     const apiSearchResult = await apiClient.searchProduct('top');
     expect(apiSearchResult.responseCode).toBe(200);
     expect(apiSearchResult.products.length).toBeGreaterThan(0);
@@ -118,13 +148,13 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     // UI and API counts should agree (both searching the same dataset)
     expect(uiResultCount).toBe(apiSearchResult.products.length);
 
-    // ── Step 6: API — verify user details match what we registered ──────────────
+    // ── Step 7: API — verify user details match what we registered ──────────────
     const userDetail = await apiClient.getUserDetailByEmail(user.email);
     expect(userDetail.responseCode).toBe(200);
     expect(userDetail.user.email).toBe(user.email);
     expect(userDetail.user.name).toBe(user.name);
 
-    // ── Step 7: API teardown — delete test account ──────────────────────────────
+    // ── Step 8: API teardown — delete test account ──────────────────────────────
     const deleted = await apiClient.deleteAccount(user.email, user.password);
     expect(deleted.responseCode).toBe(200);
   });

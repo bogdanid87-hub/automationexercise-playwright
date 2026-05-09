@@ -11,7 +11,8 @@ import { USERS } from '../data/testData';
 import { ContactPage } from '../pages/ContactPage';
 import { PaymentPage } from '../pages/PaymentPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
-import { OrderPlacedPage } from '@pages/OrderPlacedPage';
+import { OrderPlacedPage } from '../pages/OrderPlacedPage';
+import { AccountDeletedPage } from '../pages/AccountDeletedPage';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -24,6 +25,7 @@ type Fixtures = {
   paymentPage: PaymentPage;
   checkoutPage: CheckoutPage;
   orderPlacedPage: OrderPlacedPage;
+  accountDeletedPage: AccountDeletedPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -70,6 +72,11 @@ export const test = base.extend<Fixtures>({
   orderPlacedPage: async ({ page }, use) => {
     await use(new OrderPlacedPage(page));
   },
+
+  accountDeletedPage: async ({ page }, use) => {
+    await use(new AccountDeletedPage(page));
+  },
 });
+  
 
 export { expect } from '@playwright/test';

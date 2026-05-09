@@ -46,6 +46,30 @@ export class BasePage {
     await this.navLogout.click();
   }
 
+async navigateViaHome(navLink: Locator) {
+  await this.navigate();
+  await this.dismissOverlays();
+  await expect(this.page).toHaveURL('/');  // assert we're on home first
+  await navLink.click();
+  await this.waitForPageLoad();
+}
+
+async navigateHome() {
+  await this.navHome.click();
+  await this.waitForPageLoad();
+  await expect(this.page).toHaveURL('/');
+}
+  
+
+async waitForPageLoad() {
+  // networkidle causes timeouts due to continuous background 
+  // network activity — using 'load' instead which waits for 
+  // the page and its resources without waiting for all network 
+  // requests to complete
+  await this.page.waitForLoadState('load');
+}
+
+
   // Dismiss cookie/ad overlays that may block interactions
 async dismissOverlays() {
   // consent banner
@@ -62,10 +86,11 @@ async dismissOverlays() {
     await surveyClose.click();
   }
 }
-async subscribeToNewsletter(email: string) {
-await this.page.evaluate(() => {
-  (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
-});
+
+  async subscribeToNewsletter(email: string) {
+    await this.page.evaluate(() => {
+    (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
+  });
   await this.page.waitForTimeout(500);
   await this.subscriptionEmail.fill(email);
   await this.subscriptionButton.click();

@@ -23,6 +23,8 @@ export class SignupPage extends BasePage {
   readonly createAccountButton: Locator;
   readonly accountCreatedHeader: Locator;
   readonly continueButton: Locator;
+  readonly newsletterCheckbox: Locator;
+  readonly offersCheckbox: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -45,6 +47,8 @@ export class SignupPage extends BasePage {
     this.createAccountButton = page.locator('[data-qa="create-account"]');
     this.accountCreatedHeader = page.locator('h2[data-qa="account-created"]');
     this.continueButton = page.locator('[data-qa="continue-button"]');
+    this.newsletterCheckbox = page.locator('#newsletter');
+    this.offersCheckbox = page.locator('#optin');
   }
 
   async fillAccountDetails(data: {
@@ -81,6 +85,14 @@ export class SignupPage extends BasePage {
     await this.city.fill(data.city);
     await this.zipcode.fill(data.zipcode);
     await this.mobileNumber.fill(data.mobile_number);
+  }
+  
+  async acceptNewsletter() {
+    await this.newsletterCheckbox.check();
+  }
+
+  async acceptSpecialOffers() {
+    await this.offersCheckbox.check();
   }
 
   async submitAndConfirm() {

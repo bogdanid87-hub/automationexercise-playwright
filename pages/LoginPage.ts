@@ -34,6 +34,9 @@ export class LoginPage extends BasePage {
     await this.dismissOverlays();
     await expect(this.loginButton).toBeVisible();
   }
+async loginViaHome() {
+  await this.navigateViaHome(this.navSignupLogin);
+}
 
   async login(email: string, password: string) {
     await this.loginEmail.fill(email);
@@ -54,4 +57,8 @@ export class LoginPage extends BasePage {
   async expectSignupEmailExistsError() {
     await expect(this.signupErrorText).toBeVisible();
   }
+  async expectOnLoginPage() {
+  await expect(this.page).toHaveURL('/login');
+}
+
 }

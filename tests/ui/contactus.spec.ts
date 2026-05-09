@@ -5,10 +5,14 @@ import { CONTACT_US } from '../../data/testData';
 
 
 test.describe('Contact Us', () => {
-
+//TC6
   test('should submit contact form successfully', async ({ contactPage }) => {
-    await contactPage.goto();
+    await contactPage.navigate();
+    await contactPage.dismissOverlays();
+    await contactPage.navContactUs.click();
+    await contactPage.waitForPageLoad();
     await contactPage.setupDialogHandler();
+    
 
     await contactPage.submitContactForm(
         CONTACT_US.valid.name,
@@ -16,9 +20,12 @@ test.describe('Contact Us', () => {
         CONTACT_US.valid.subject,
         CONTACT_US.valid.message
         );
+      //  await contactPage.setupDialogHandler();
     await contactPage.expectSuccessMessage();
-  });
+    await contactPage.navigateHome();
 
+  });
+//Negative test cases for contact form validation use direct url for speed
     test('should show validation error for missing email', async ({ contactPage }) => {
       await contactPage.goto();
       await contactPage.setupDialogHandler();

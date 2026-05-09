@@ -7,7 +7,7 @@ export class PaymentPage extends BasePage {
 
 constructor(page: Page) {
     super(page);
-    this.paymentDetailsSection = page.locator('.Payment');
+    this.paymentDetailsSection = page.locator('.payment-information');
     this.payButton = page.locator('[data-qa="pay-button"]');
 }
 

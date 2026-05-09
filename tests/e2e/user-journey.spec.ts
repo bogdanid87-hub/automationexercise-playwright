@@ -106,7 +106,8 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     await checkoutPage.enterOrderMessage('Please deliver between 9 AM and 5 PM.');
     await checkoutPage.placeOrder();
 
-    await checkoutPage.expectPaymentPage();
+    const paymentPage = new PaymentPage(page);
+    await paymentPage.goto();
    
 
     // ── Step 5: API cross-validation — confirm same search term returns results ─

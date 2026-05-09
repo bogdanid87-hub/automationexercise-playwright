@@ -9,6 +9,8 @@ import { CartPage } from '../pages/CartPage';
 import { ApiClient } from '../api/ApiClient';
 import { USERS } from '../data/testData';
 import { ContactPage } from '../pages/ContactPage';
+import { PaymentPage } from '../pages/PaymentPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -18,6 +20,8 @@ type Fixtures = {
   apiClient: ApiClient;
   authenticatedPage: LoginPage; // loginPage with user already logged in
   contactPage: ContactPage;
+  paymentPage: PaymentPage;
+  checkoutPage: CheckoutPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -52,6 +56,14 @@ export const test = base.extend<Fixtures>({
   contactPage: async ({ page }, use) => {
     await use(new ContactPage(page));
   },
+
+  paymentPage: async ({ page }, use) => {
+    await use(new PaymentPage(page));
+  },
+
+  checkoutPage: async ({ page }, use) => {
+    await use(new CheckoutPage(page));
+  }
 });
 
 export { expect } from '@playwright/test';

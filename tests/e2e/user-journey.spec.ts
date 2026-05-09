@@ -18,6 +18,8 @@ import { USERS } from '../../data/testData';
 import { LoginPage } from '../../pages/LoginPage';
 import { ProductsPage } from '../../pages/ProductsPage';
 import { CartPage } from '../../pages/CartPage';
+import { CheckoutPage } from '../../pages/CheckoutPage';
+import { PaymentPage } from '../../pages/PaymentPage';
 
 test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
 
@@ -76,7 +78,38 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     const cartItemCount = await cartPage.getItemCount();
     expect(cartItemCount).toBeGreaterThanOrEqual(1);
 
-    // ── Step 4: API cross-validation — confirm same search term returns results ─
+    // ── Step 4: UI checkout and address validation ─────────────────────────────────────
+    const checkoutPage = new CheckoutPage(page);
+    await checkoutPage.goto();
+    await expect(checkoutPage.deliveryAddressSection).toBeVisible();
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.firstname);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.lastname);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.address1);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.address2);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.city);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.zipcode);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.state);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.country);
+    await expect(checkoutPage.deliveryAddressSection).toContainText(user.mobile_number);
+    await expect(checkoutPage.billingAddressSection).toBeVisible();
+    await expect(checkoutPage.billingAddressSection).toContainText(user.firstname);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.lastname);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.address1);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.address2);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.city);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.zipcode);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.state);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.country);
+    await expect(checkoutPage.billingAddressSection).toContainText(user.mobile_number);
+    
+
+    await checkoutPage.enterOrderMessage('Please deliver between 9 AM and 5 PM.');
+    await checkoutPage.placeOrder();
+
+    await checkoutPage.expectPaymentPage();
+   
+
+    // ── Step 5: API cross-validation — confirm same search term returns results ─
     const apiSearchResult = await apiClient.searchProduct('top');
     expect(apiSearchResult.responseCode).toBe(200);
     expect(apiSearchResult.products.length).toBeGreaterThan(0);
@@ -84,13 +117,13 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     // UI and API counts should agree (both searching the same dataset)
     expect(uiResultCount).toBe(apiSearchResult.products.length);
 
-    // ── Step 5: API — verify user details match what we registered ──────────────
+    // ── Step 6: API — verify user details match what we registered ──────────────
     const userDetail = await apiClient.getUserDetailByEmail(user.email);
     expect(userDetail.responseCode).toBe(200);
     expect(userDetail.user.email).toBe(user.email);
     expect(userDetail.user.name).toBe(user.name);
 
-    // ── Step 6: API teardown — delete test account ──────────────────────────────
+    // ── Step 7: API teardown — delete test account ──────────────────────────────
     const deleted = await apiClient.deleteAccount(user.email, user.password);
     expect(deleted.responseCode).toBe(200);
   });

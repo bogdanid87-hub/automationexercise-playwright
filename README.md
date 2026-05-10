@@ -23,20 +23,29 @@ This suite covers API tests, UI tests around authentication, products and contac
 
 ## Test Coverage
 
-| Folder | Description |
-|---|---|
-| `tests/api` | Products, brands, search and user account lifecycle |
-| `tests/ui` | Authentication, Contact Us, searching products and adding to cart, Subscription |
-| `tests/e2e` | Full journey from account creation, searching and adding products, and account deletion — API cross-validation on product count returned by the UI search |
+| Folder | Description | Test Cases |
+|---|---|---|
+| `tests/api` | Products, brands, search and user account lifecycle | — |
+| `tests/ui/auth.spec.ts` | Authentication | TC1, TC2, TC3, TC4, TC5 |
+| `tests/ui/contactus.spec.ts` | Contact Us | TC6 |
+| `tests/ui/products.spec.ts` | Searching products and adding to cart | TC8, TC9, TC12 |
+| `tests/ui/subscription.spec.ts` | Subscription | TC10 |
+| `tests/e2e/user-journey.spec.ts` | Full purchase journey with API cross-validation | TC15, TC16, TC23, TC24 |
 
 **To be added:**
-- Checkout page
-- Verifying test cases and API testing pages
-- Removing items from cart
-- Navigation tests using UI clicks
-- Negative tests
-- Scroll functionality
-- Downloading invoice after purchase
+- TC7: Verify Test Cases Page — `tests/ui/navigation.spec.ts`
+- TC8: Verify All Products and product detail page — `tests/ui/products.spec.ts`
+- TC11: Subscription in Cart page — `tests/ui/subscription.spec.ts`
+- TC13: Verify Product quantity in Cart — `tests/ui/cart.spec.ts`
+- TC14: Place Order — Register while Checkout — `tests/e2e/user-journey.spec.ts`
+- TC17: Remove Products From Cart — `tests/ui/cart.spec.ts`
+- TC18: View Category Products — `tests/ui/categories.spec.ts`
+- TC19: View & Cart Brand Products — `tests/ui/categories.spec.ts`
+- TC20: Search Products and Verify Cart After Login — `tests/e2e/user-journey.spec.ts`
+- TC21: Add review on product — `tests/ui/products.spec.ts`
+- TC22: Add to cart from Recommended items — `tests/ui/products.spec.ts`
+- TC25: Scroll Up using Arrow button and Scroll Down — `tests/ui/scroll.spec.ts`
+- TC26: Scroll Up without Arrow button and Scroll Down — `tests/ui/scroll.spec.ts`
 
 ---
 
@@ -63,3 +72,4 @@ npx playwright test tests
 - In both Chrome for Mac and Playwright's Pick Locator, the browser email validation reads `"Please fill in this field."` — but when running tests with Playwright's Chromium, it returns `"Please fill out this field."` — leading to the design decision to validate the email field using `validity.valueMissing` instead of asserting the message text
 - `BasePage.ts` has extended beyond its initial scope by including subscription logic — this will be refactored into a separate component at the end of the project
 - Product card interaction required explicit scrolling due to Google ads and the "Searched Products" heading intercepting clicks on the add to cart button at different stages of debugging
+- Api and UI asserts would need to go deeper in a real project, as they could fail, if for example, there are too many results for the UI to load in one go (it uses lazy load)

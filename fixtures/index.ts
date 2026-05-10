@@ -1,7 +1,7 @@
 // fixtures/index.ts
 // Extends Playwright's base test with pre-wired page objects and API client
 
-import { test as base, APIRequestContext } from '@playwright/test';
+import { test as base } from './routeBlocker';
 import { LoginPage } from '../pages/LoginPage';
 import { SignupPage } from '../pages/SignupPage';
 import { ProductsPage } from '../pages/ProductsPage';
@@ -13,6 +13,8 @@ import { PaymentPage } from '../pages/PaymentPage';
 import { CheckoutPage } from '../pages/CheckoutPage';
 import { OrderPlacedPage } from '../pages/OrderPlacedPage';
 import { AccountDeletedPage } from '../pages/AccountDeletedPage';
+import { ProductDetailsPage } from '../pages/ProductDetailsPage';
+
 
 type Fixtures = {
   loginPage: LoginPage;
@@ -26,6 +28,7 @@ type Fixtures = {
   checkoutPage: CheckoutPage;
   orderPlacedPage: OrderPlacedPage;
   accountDeletedPage: AccountDeletedPage;
+  productDetailsPage: ProductDetailsPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -75,6 +78,10 @@ export const test = base.extend<Fixtures>({
 
   accountDeletedPage: async ({ page }, use) => {
     await use(new AccountDeletedPage(page));
+  },
+
+  productDetailsPage: async ({ page }, use) => {
+    await use(new ProductDetailsPage(page));
   },
 });
   

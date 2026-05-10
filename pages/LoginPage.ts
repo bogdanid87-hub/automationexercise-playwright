@@ -9,12 +9,14 @@ export class LoginPage extends BasePage {
   readonly loginPassword: Locator;
   readonly loginButton: Locator;
   readonly loginErrorText: Locator;
+  readonly loginForm: Locator;
 
   // ─── Signup section ──────────────────────────────────────────────────────────
   readonly signupName: Locator;
   readonly signupEmail: Locator;
   readonly signupButton: Locator;
   readonly signupErrorText: Locator;
+  readonly signupForm: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -22,11 +24,13 @@ export class LoginPage extends BasePage {
     this.loginPassword = page.locator('[data-qa="login-password"]');
     this.loginButton = page.locator('[data-qa="login-button"]');
     this.loginErrorText = page.locator('p:has-text("Your email or password is incorrect")');
+    this.loginForm = page.locator('.login-form h2');
 
     this.signupName = page.locator('[data-qa="signup-name"]');
     this.signupEmail = page.locator('[data-qa="signup-email"]');
     this.signupButton = page.locator('[data-qa="signup-button"]');
     this.signupErrorText = page.locator('p:has-text("Email Address already exist")');
+    this.signupForm = page.locator('.signup-form h2');
   }
 
   async goto() {
@@ -36,6 +40,12 @@ export class LoginPage extends BasePage {
   }
 async loginViaHome() {
   await this.navigateViaHome(this.navSignupLogin);
+}
+async loginPageLoaded() {
+  await expect(this.loginForm).toBeVisible();
+  await expect(this.signupForm).toBeVisible();
+  await expect(this.loginForm).toHaveText('Login to your account');
+  await expect(this.signupForm).toHaveText('New User Signup!');
 }
 
   async login(email: string, password: string) {

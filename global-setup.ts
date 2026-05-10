@@ -11,6 +11,22 @@ async function globalSetup() {
   ] as const) {
     const browser = await browserType.launch();
     const page = await browser.newPage();
+
+    await page.route('**/*', (route) => {
+      const url = route.request().url();
+      if (
+        url.includes('fundingchoicesmessages') ||
+        url.includes('googlesyndication') ||
+        url.includes('doubleclick') ||
+        url.includes('googleads') ||
+        url.includes('adsbygoogle')
+      ) {
+        route.abort();
+      } else {
+        route.continue();
+      }
+    });
+
     await page.goto('https://automationexercise.com');
 
     const consent = page.locator('button:has-text("Consent"), button:has-text("Accept")');

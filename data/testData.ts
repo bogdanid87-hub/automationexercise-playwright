@@ -33,9 +33,10 @@ export const USERS = {
   // Dynamically generated user for registration tests
   newUser: () => {
     const ts = Date.now();
+    const random = Math.floor(Math.random() * 10000);
     return {
       name: `QA User ${ts}`,
-      email: `qauser_${ts}@mailtest.com`,
+      email: `qauser_${ts}_${random}@mailtest.com`,
       password: 'SecurePass123!',
       title: 'Mr',
       birth_date: '15',

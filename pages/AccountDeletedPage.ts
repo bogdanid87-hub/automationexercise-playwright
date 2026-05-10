@@ -17,6 +17,7 @@ export class AccountDeletedPage extends BasePage {
 
     async expectAccountDeleted() {
         await expect(this.accountDeletedHeader).toBeVisible();
+        await expect(this.accountDeletedHeader).toHaveText('Account Deleted!');
         await expect(this.permanentDeletionMessage).toBeVisible();
         await expect(this.additionalInfoMessage).toBeVisible();
     }

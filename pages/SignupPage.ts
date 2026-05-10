@@ -25,6 +25,7 @@ export class SignupPage extends BasePage {
   readonly continueButton: Locator;
   readonly newsletterCheckbox: Locator;
   readonly offersCheckbox: Locator;
+  readonly enterAccountInfoTitle: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -49,6 +50,7 @@ export class SignupPage extends BasePage {
     this.continueButton = page.locator('[data-qa="continue-button"]');
     this.newsletterCheckbox = page.locator('#newsletter');
     this.offersCheckbox = page.locator('#optin');
+    this.enterAccountInfoTitle = page.getByRole('heading', { name: 'Enter Account Information' });
   }
 
   async fillAccountDetails(data: {
@@ -86,7 +88,11 @@ export class SignupPage extends BasePage {
     await this.zipcode.fill(data.zipcode);
     await this.mobileNumber.fill(data.mobile_number);
   }
-  
+  async signupLoaded() {
+    await expect(this.enterAccountInfoTitle).toBeVisible();
+    await expect(this.enterAccountInfoTitle).toHaveText('Enter Account Information');
+  }
+
   async acceptNewsletter() {
     await this.newsletterCheckbox.check();
   }
@@ -98,6 +104,7 @@ export class SignupPage extends BasePage {
   async submitAndConfirm() {
     await this.createAccountButton.click();
     await expect(this.accountCreatedHeader).toBeVisible();
+    await expect(this.accountCreatedHeader).toHaveText('Account Created!');
     await this.continueButton.click();
   }
 }

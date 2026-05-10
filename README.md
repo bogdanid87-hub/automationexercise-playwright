@@ -28,17 +28,14 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/api` | Products, brands, search and user account lifecycle | — |
 | `tests/ui/auth.spec.ts` | Authentication | TC1, TC2, TC3, TC4, TC5 |
 | `tests/ui/contactus.spec.ts` | Contact Us | TC6 |
-| `tests/ui/products.spec.ts` | Searching products and adding to cart | TC8, TC9, TC12 |
+| `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17 |
 | `tests/ui/subscription.spec.ts` | Subscription | TC10 |
 | `tests/e2e/user-journey.spec.ts` | Full purchase journey with API cross-validation | TC15, TC16, TC23, TC24 |
 
 **To be added:**
 - TC7: Verify Test Cases Page — `tests/ui/navigation.spec.ts`
-- TC8: Verify All Products and product detail page — `tests/ui/products.spec.ts`
 - TC11: Subscription in Cart page — `tests/ui/subscription.spec.ts`
-- TC13: Verify Product quantity in Cart — `tests/ui/cart.spec.ts`
 - TC14: Place Order — Register while Checkout — `tests/e2e/user-journey.spec.ts`
-- TC17: Remove Products From Cart — `tests/ui/cart.spec.ts`
 - TC18: View Category Products — `tests/ui/categories.spec.ts`
 - TC19: View & Cart Brand Products — `tests/ui/categories.spec.ts`
 - TC20: Search Products and Verify Cart After Login — `tests/e2e/user-journey.spec.ts`
@@ -71,5 +68,8 @@ npx playwright test tests
 - The ID for the subscription email field is misspelled in the website's HTML (`susbscribe_email` instead of `subscribe_email`)
 - In both Chrome for Mac and Playwright's Pick Locator, the browser email validation reads `"Please fill in this field."` — but when running tests with Playwright's Chromium, it returns `"Please fill out this field."` — leading to the design decision to validate the email field using `validity.valueMissing` instead of asserting the message text
 - `BasePage.ts` has extended beyond its initial scope by including subscription logic — this will be refactored into a separate component at the end of the project
-- Product card interaction required explicit scrolling due to Google ads and the "Searched Products" heading intercepting clicks on the add to cart button at different stages of debugging
+- Product card interaction required explicit scrolling due to Google ads and the "Searched Products" heading intercepting clicks on the add to cart button at different stages of debugging (will be changed later as now ads are blocked)
 - Api and UI asserts would need to go deeper in a real project, as they could fail, if for example, there are too many results for the UI to load in one go (it uses lazy load)
+- There are unused methods that will need to be removed at a later stage
+- In order to better validate possible fails and speed up tests, I have opted out to not follow strictly the example test cases; for example, some tests will use goto instead of UI navigation, if the UI navigation was already tested in another test
+- I have chosen to block ads, as they were randomly breaking tests (they were waiting for Playwright to finish before being displayed)

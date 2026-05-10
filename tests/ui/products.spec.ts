@@ -5,17 +5,12 @@ import { test, expect } from '../../fixtures';
 import { PRODUCTS } from '../../data/testData';
 
 test.describe('Products', () => {
-
+// TC8: Verify All Products and product detail page
+// Split into two focused tests for better failure isolation —
+// if product listing breaks and detail page breaks independently,
+// each failure is immediately identifiable without investigating a combined test
   test('should display all products on the products page', async ({ productsPage }) => {
-    await productsPage.goto();
-
-    const count = await productsPage.getProductCount();
-    expect(count).toBeGreaterThan(0);
-  });
-
-  test('should return results for a valid search term', async ({ productsPage }) => {
-    await productsPage.goto();
-    await productsPage.searchFor(PRODUCTS.searchTerms.valid);
+    await productsPage.navigateViaHome(productsPage.navProducts);
 
     const count = await productsPage.getProductCount();
     expect(count).toBeGreaterThan(0);
@@ -23,41 +18,119 @@ test.describe('Products', () => {
 
   test('should show product detail page when clicking View Product', async ({
     productsPage,
-    page,
+    productDetailsPage,
   }) => {
-    await productsPage.goto();
+    await productsPage.navigateViaHome(productsPage.navProducts);
+    await expect(productsPage.productsPageTitle).toBeVisible();
+    await expect(productsPage.productsPageTitle).toHaveText('All Products'); // Ensure we're on the products page before interacting
+    const productName = await productsPage.getFirstProductName(); // Capture the name of the first product to verify on the detail page
+    const productPrice = await productsPage.getFirstProductPrice(); // Capture the price of the first product to verify on the detail page
     await productsPage.viewFirstProduct();
 
-    // Product detail page has a quantity input and Add to Cart button
-    await expect(page.locator('#quantity')).toBeVisible();
-    await expect(page.locator('button:has-text("Add to cart")')).toBeVisible();
+    await expect(productDetailsPage.productName).toBeVisible();
+    await expect(productDetailsPage.productName).toHaveText(productName);
+    await expect(productDetailsPage.productPrice).toHaveText(productPrice);
+    await expect(productDetailsPage.productCategory).toBeVisible();
+    await expect(productDetailsPage.availability).toBeVisible();
+    await expect(productDetailsPage.condition).toBeVisible();
+    await expect(productDetailsPage.brand).toBeVisible();
   });
 
-  test('should add product to cart from detail page', async ({ productsPage, cartPage }) => {
-    await productsPage.goto();
-    await productsPage.viewFirstProduct();
-    await productsPage.expectAddToCartVisible();
+//TC9
+  test('should return results for a valid search term', async ({ productsPage }) => {
+    await productsPage.navigateViaHome(productsPage.navProducts);
+    await productsPage.searchFor(PRODUCTS.searchTerms.anotherValid);
 
-    await productsPage.addToCartButton.click();
+    await expect(productsPage.productsPageTitle).toBeVisible();
+    await expect(productsPage.productsPageTitle).toHaveText('Searched Products');
+
+    const count = await productsPage.getProductCount();
+    expect(count).toBeGreaterThan(0);
+    const productNames = await productsPage.getProductNames();
+    productNames.forEach(name => {
+      expect(name.toLowerCase()).toContain(PRODUCTS.searchTerms.anotherValid);
+    });
+  });
+
+//TC12 - compared to the example test, this adds 2 same products to verify price total 
+  test('should add products to cart and verify totals', async ({ productsPage, cartPage }) => {
+    await productsPage.goto();
+    const firstProductName = await productsPage.getFirstProductName();
+    const firstProductPrice = await productsPage.getFirstProductPrice();
+    const secondProductName = await productsPage.getSecondProductName();
+    const secondProductPrice = await productsPage.getSecondProductPrice();
+    await productsPage.addFirstProductToCart();
 
     // Dismiss the success modal
     await productsPage.dismissAddedToCartModal();
-
+    // Add a second product
+    await productsPage.addSecondProductToCart();
+    await productsPage.dismissAddedToCartModal();
+    await productsPage.addSecondProductToCart();
+    await productsPage.navigateToCartFromModal();
+    
     await cartPage.goto();
     const itemCount = await cartPage.getItemCount();
-    expect(itemCount).toBeGreaterThanOrEqual(1);
-  });
+    expect(itemCount).toBe(2);
 
-  test('should add a product to cart', async ({ productsPage, cartPage }) => {
+    const cartItems = await cartPage.getCartItemDetails();
+    expect(cartItems[0].name).toBe(firstProductName);
+    expect(cartItems[0].price).toBe(firstProductPrice);
+    expect(cartItems[0].quantity).toBe('1');
+    expect(cartItems[0].total).toBe(firstProductPrice);
+    expect(cartItems[1].name).toBe(secondProductName);
+    expect(cartItems[1].price).toBe(secondProductPrice);
+    expect(cartItems[1].quantity).toBe('2');
+    const secondItemTotal = parseFloat(secondProductPrice.replace('Rs.', '')) * 2;
+    expect(cartItems[1].total).toBe(`Rs. ${secondItemTotal}`);
+  });
+//TC13
+    test('should add product to cart from detail page and verify quantity', async ({ productsPage, cartPage, productDetailsPage }) => {
+    await productsPage.goto();
+    await productsPage.viewFirstProduct();
+    await expect(productDetailsPage.addToCartButton).toBeVisible();
+    await productDetailsPage.expectURL(/\/product_details\//); // Ensure we're on a product detail page
+
+    await productDetailsPage.setQuantity(4); // Set quantity to 4
+
+    await productDetailsPage.addToCartButton.click();
+
+    // Dismiss the success modal
+    await productDetailsPage.dismissAddedToCartModal();
+
+    await cartPage.goto();
+    const cartItems = await cartPage.getCartItemDetails();
+    expect(cartItems[0].quantity).toBe('4');
+  });
+  //TC17
+  test('should add product to cart and then remove it', async ({ productsPage, cartPage }) => {
     await productsPage.goto();
     await productsPage.addFirstProductToCart();
 
     // Dismiss the success modal
-    
-    await productsPage.dismissAddedToCartModal();
+    await productsPage.navigateToCartFromModal();
 
     await cartPage.goto();
-    const itemCount = await cartPage.getItemCount();
-    expect(itemCount).toBeGreaterThanOrEqual(1);
+    let itemCount = await cartPage.getItemCount();
+    expect(itemCount).toBe(1);
+
+    await cartPage.removeItem();
+
+    await cartPage.expectCartIsEmpty();
   });
+  //additional test - add products to cart using keyboard arrow keys
+  test('should add product to cart using keyboard navigation', async ({ productsPage, productDetailsPage, cartPage }) => {
+    await productsPage.goto();
+    await productsPage.viewFirstProduct();
+    await productDetailsPage.incrementQuantity();  // Increment quantity using keyboard
+    await productDetailsPage.addToCart();
+
+    // Dismiss the success modal
+    await productDetailsPage.dismissAddedToCartModal();
+
+    await cartPage.goto();
+    const cartItems = await cartPage.getCartItemDetails();
+    expect(cartItems[0].quantity).toBe('2'); // Quantity should be 2 after incrementing
+  });
+
 });   

@@ -58,8 +58,8 @@ export const USERS = {
 
 export const PRODUCTS = {
   searchTerms: {
-    valid: 'tshirt',       // a search that should return results
-    anotherValid: 'top',   // another one that should return results
+    valid: 'top',       // a search that should return results
+    anotherValid: 'jeans',   // return exact results, unlike top with returns fuzzy results
     noResults: 'zzznoresults999',  // a search that should return nothing
   },
   categories: {

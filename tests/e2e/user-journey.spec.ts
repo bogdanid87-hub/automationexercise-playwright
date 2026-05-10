@@ -16,7 +16,7 @@
 // exactly what senior QA engineers do in production fintech test suites.
 
 import { test, expect } from '../../fixtures';
-import { PAYMENT, USERS } from '../../data/testData';
+import { PAYMENT, PRODUCTS, USERS } from '../../data/testData';
 import { LoginPage } from '../../pages/LoginPage';
 import { ProductsPage } from '../../pages/ProductsPage';
 import { CartPage } from '../../pages/CartPage';
@@ -64,7 +64,7 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     // ── Step 3: UI — search and add product to cart ─────────────────────────────
     const productsPage = new ProductsPage(page);
     await productsPage.goto();
-    await productsPage.searchFor('top');
+    await productsPage.searchFor(PRODUCTS.searchTerms.valid);
 
     const uiResultCount = await productsPage.getProductCount();
     expect(uiResultCount).toBeGreaterThan(0);
@@ -141,7 +141,7 @@ test.describe('E2E — Full User Journey (UI + API cross-validation)', () => {
     await orderPlacedPage.continueShopping();
 
     // ── Step 6: API cross-validation — confirm same search term returns results ─
-    const apiSearchResult = await apiClient.searchProduct('top');
+    const apiSearchResult = await apiClient.searchProduct(PRODUCTS.searchTerms.valid);
     expect(apiSearchResult.responseCode).toBe(200);
     expect(apiSearchResult.products.length).toBeGreaterThan(0);
 

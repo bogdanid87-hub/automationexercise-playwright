@@ -105,6 +105,11 @@ async dismissAddedToCartModal() {
   await continueBtn.click();
 }
 
+async navigateToCartFromModal() {
+  const viewCartBtn = this.page.locator('.text-center:has-text("View Cart")');
+  await viewCartBtn.click();
+}
+
   async subscribeToNewsletter(email: string) {
     await this.page.evaluate(() => {
     (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
@@ -128,4 +133,7 @@ async dismissAddedToCartModal() {
     await expect(this.subscriptionEmail).toHaveAttribute('type', 'email');
     await expect(this.subscriptionEmail).toHaveJSProperty('validity.typeMismatch', true);
   }
+  async expectURL(pattern: string | RegExp) {
+  await expect(this.page).toHaveURL(pattern);
+}
 }

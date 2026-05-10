@@ -39,4 +39,24 @@ export class CartPage extends BasePage {
   async expectCartIsEmpty() {
     await expect(this.emptyCartMessage).toBeVisible();
   }
+
+ async getCartItemDetails(): Promise<{
+  name: string;
+  price: string;
+  quantity: string;
+  total: string;
+}[]> {
+  const rows = await this.cartItems.all();
+  const items = [];
+  
+  for (const row of rows) {
+    const name = await row.locator('.cart_description h4 a').innerText();
+    const price = await row.locator('.cart_price p').innerText();
+    const quantity = await row.locator('.cart_quantity button').innerText();
+    const total = await row.locator('.cart_total_price').innerText();
+    items.push({ name, price, quantity, total });
+  }
+  
+  return items;
+}
 }

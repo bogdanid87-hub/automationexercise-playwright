@@ -61,14 +61,14 @@ export default defineConfig({
   //     use: { ...devices['Desktop Safari'], 
   //      storageState: 'storageState.webkit.json',},
   //   },
-  //  {
-  //     name: 'api',
-  //     testDir: './tests/api',
-  //     use: {
-  //       // API tests don't need a browser
-  //       baseURL: 'https://automationexercise.com',
-  //     },
-  //   }
+   {
+      name: 'api',
+      testDir: './tests/api',
+      use: {
+        // API tests don't need a browser
+        baseURL: 'https://automationexercise.com',
+      },
+    }
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',

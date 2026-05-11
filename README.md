@@ -1,4 +1,5 @@
 # Automation Exercise — Playwright Test Suite
+![Playwright Tests](https://github.com/bogdanid87-hub/automationexercise-playwright/actions/workflows/playwright.yml/badge.svg)
 
 A Playwright test suite for [Automation Exercise](https://automationexercise.com), built as part of a QA portfolio project — **Work In Progress**
 
@@ -44,6 +45,7 @@ This suite covers API tests, UI tests around authentication, products and contac
 - TC22: Add to cart from Recommended items
 - TC25: Scroll Up using Arrow button and Scroll Down
 - TC26: Scroll Up without Arrow button and Scroll Down
+- Visual regression on product details page, login/signup and contact us
 
 ---
 

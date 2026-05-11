@@ -15,6 +15,7 @@ export class BasePage {
   readonly navDeleteAccount: Locator;
   readonly loggedInAsText: Locator;
   readonly navContactUs: Locator;
+  readonly subscriptionWidget: Locator;
   readonly subscriptionEmail: Locator;
   readonly subscriptionButton: Locator;
   readonly subscriptionSuccessMessage: Locator;
@@ -24,12 +25,13 @@ export class BasePage {
     this.page = page;
     this.navHome = page.locator('a[href="/"]').first();
     this.navProducts = page.locator('a[href="/products"]');
-    this.navCart = page.locator('a[href="/view_cart"]');
+    this.navCart = page.locator('header a[href="/view_cart"]');
     this.navSignupLogin = page.locator('a[href="/login"]');
     this.navLogout = page.locator('a[href="/logout"]');
     this.navDeleteAccount = page.locator('a[href="/delete_account"]');
     this.loggedInAsText = page.locator('li:has-text("Logged in as")');
     this.navContactUs = page.locator('a[href="/contact_us"]');
+    this.subscriptionWidget = page.locator('.single-widget h2:has-text("Subscription")');
     this.subscriptionEmail = page.locator('#susbscribe_email');
     this.subscriptionButton = page.locator('#subscribe');
     this.subscriptionSuccessMessage = page.locator('#success-subscribe');

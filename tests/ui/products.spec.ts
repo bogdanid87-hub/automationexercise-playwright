@@ -67,9 +67,9 @@ test.describe('Products', () => {
     await productsPage.addSecondProductToCart();
     await productsPage.dismissAddedToCartModal();
     await productsPage.addSecondProductToCart();
+    // instead of dismissing the modal, we use it to navigate to cart
     await productsPage.navigateToCartFromModal();
     
-    await cartPage.goto();
     const itemCount = await cartPage.getItemCount();
     expect(itemCount).toBe(2);
 
@@ -98,7 +98,8 @@ test.describe('Products', () => {
     // Dismiss the success modal
     await productDetailsPage.dismissAddedToCartModal();
 
-    await cartPage.goto();
+    await cartPage.navCart.click()
+    await cartPage.waitForPageLoad;
     const cartItems = await cartPage.getCartItemDetails();
     expect(cartItems[0].quantity).toBe('4');
   });
@@ -107,10 +108,9 @@ test.describe('Products', () => {
     await productsPage.goto();
     await productsPage.addFirstProductToCart();
 
-    // Dismiss the success modal
+    // instead of dismissing the modal, we use it to navigate to cart
     await productsPage.navigateToCartFromModal();
 
-    await cartPage.goto();
     let itemCount = await cartPage.getItemCount();
     expect(itemCount).toBe(1);
 

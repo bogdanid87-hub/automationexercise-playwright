@@ -76,3 +76,4 @@ npx playwright test tests
 - There are unused methods that will need to be removed at a later stage
 - In order to better validate possible fails and speed up tests, I have opted out to not follow strictly the example test cases; for example, some tests will use goto instead of UI navigation, if the UI navigation was already tested in another test
 - I have chosen to block ads, as they were randomly breaking tests (they were waiting for Playwright to finish before being displayed)
+- configured to run on Chromium only for speed

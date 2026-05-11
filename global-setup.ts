@@ -6,8 +6,8 @@ async function globalSetup() {
 
   for (const [browserType, stateFile] of [
     [chromium, 'storageState.chromium.json'],
-    [firefox, 'storageState.firefox.json'],
-    [webkit, 'storageState.webkit.json'],
+    // [firefox, 'storageState.firefox.json'],
+    // [webkit, 'storageState.webkit.json'],
   ] as const) {
     const browser = await browserType.launch();
     const page = await browser.newPage();

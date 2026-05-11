@@ -29,20 +29,21 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/ui/auth.spec.ts` | Authentication | TC1, TC2, TC3, TC4, TC5 |
 | `tests/ui/contactus.spec.ts` | Contact Us | TC6 |
 | `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17 |
-| `tests/ui/subscription.spec.ts` | Subscription | TC10 |
-| `tests/e2e/user-journey.spec.ts` | Full purchase journey with API cross-validation | TC15, TC16, TC23, TC24 |
+| `tests/ui/subscription.spec.ts` | Subscription | TC10, TC11 |
+| `tests/e2e/api-assisted-purchase.spec.ts` | API-assisted purchase flow with UI validation and cross-layer assertions | TC23, TC24 |
 
 **To be added:**
-- TC7: Verify Test Cases Page — `tests/ui/navigation.spec.ts`
-- TC11: Subscription in Cart page — `tests/ui/subscription.spec.ts`
-- TC14: Place Order — Register while Checkout — `tests/e2e/user-journey.spec.ts`
-- TC18: View Category Products — `tests/ui/categories.spec.ts`
-- TC19: View & Cart Brand Products — `tests/ui/categories.spec.ts`
-- TC20: Search Products and Verify Cart After Login — `tests/e2e/user-journey.spec.ts`
-- TC21: Add review on product — `tests/ui/products.spec.ts`
-- TC22: Add to cart from Recommended items — `tests/ui/products.spec.ts`
-- TC25: Scroll Up using Arrow button and Scroll Down — `tests/ui/scroll.spec.ts`
-- TC26: Scroll Up without Arrow button and Scroll Down — `tests/ui/scroll.spec.ts`
+- TC7: Verify Test Cases Page
+- TC14: Place Order — Register while Checkout
+- TC15: Place Order — Register before Checkout (currently user is created via API, not UI registration)
+- TC16: Place Order — Login before Checkout (partially covered — login is via UI but account is created via API)
+- TC18: View Category Products
+- TC19: View & Cart Brand Products
+- TC20: Search Products and Verify Cart After Login
+- TC21: Add review on product
+- TC22: Add to cart from Recommended items
+- TC25: Scroll Up using Arrow button and Scroll Down
+- TC26: Scroll Up without Arrow button and Scroll Down
 
 ---
 

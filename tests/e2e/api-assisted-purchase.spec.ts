@@ -12,14 +12,14 @@
 // Note: Some steps use direct URL navigation for speed and reliability
 // rather than full UI navigation flows, which are covered in dedicated UI tests
 
-import { test, expect } from '../../fixtures';
-import { PAYMENT, PRODUCTS, USERS } from '../../data/testData';
-import { LoginPage } from '../../pages/LoginPage';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { CartPage } from '../../pages/CartPage';
-import { CheckoutPage } from '../../pages/CheckoutPage';
-import { PaymentPage } from '../../pages/PaymentPage';
-import { OrderPlacedPage } from '../../pages/OrderPlacedPage';
+import { test, expect } from '@fixtures/index';
+import { PAYMENT, PRODUCTS, USERS } from '@data/testData';
+import { LoginPage } from '@pages/LoginPage';
+import { ProductsPage } from '@pages/ProductsPage';
+import { CartPage } from '@pages/CartPage';
+import { CheckoutPage } from '@pages/CheckoutPage';
+import { PaymentPage } from '@pages/PaymentPage';
+import { OrderPlacedPage } from '@pages/OrderPlacedPage';
 
 test.describe('API assisted purchase (UI + API cross-validation)', () => {
 
@@ -81,25 +81,8 @@ test.describe('API assisted purchase (UI + API cross-validation)', () => {
     const checkoutPage = new CheckoutPage(page);
     await checkoutPage.goto();
     await expect(checkoutPage.deliveryAddressSection).toBeVisible();
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.firstname);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.lastname);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.address1);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.address2);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.city);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.zipcode);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.state);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.country);
-    await expect(checkoutPage.deliveryAddressSection).toContainText(user.mobile_number);
-    await expect(checkoutPage.billingAddressSection).toBeVisible();
-    await expect(checkoutPage.billingAddressSection).toContainText(user.firstname);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.lastname);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.address1);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.address2);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.city);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.zipcode);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.state);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.country);
-    await expect(checkoutPage.billingAddressSection).toContainText(user.mobile_number);
+    await checkoutPage.expectAddressDetails(checkoutPage.deliveryAddressSection, user);
+    await checkoutPage.expectAddressDetails(checkoutPage.billingAddressSection, user);
 
 
     await checkoutPage.enterOrderMessage('Please deliver between 9 AM and 5 PM.');

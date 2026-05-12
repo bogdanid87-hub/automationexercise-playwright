@@ -8,6 +8,7 @@ export class CartPage extends BasePage {
   readonly proceedToCheckoutButton: Locator;
   readonly emptyCartMessage: Locator;
   readonly cartTable: Locator;
+  readonly registerLoginModal: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -15,6 +16,7 @@ export class CartPage extends BasePage {
     this.proceedToCheckoutButton = page.locator('a:has-text("Proceed To Checkout")');
     this.emptyCartMessage = page.locator('p:has-text("Cart is empty")');
     this.cartTable = page.locator('#cart_info_table');
+    this.registerLoginModal = page.locator('.text-center u:has-text("Register / Login")');
   }
 
   async goto() {
@@ -40,23 +42,23 @@ export class CartPage extends BasePage {
     await expect(this.emptyCartMessage).toBeVisible();
   }
 
- async getCartItemDetails(): Promise<{
-  name: string;
-  price: string;
-  quantity: string;
-  total: string;
-}[]> {
-  const rows = await this.cartItems.all();
-  const items = [];
-  
-  for (const row of rows) {
-    const name = await row.locator('.cart_description h4 a').innerText();
-    const price = await row.locator('.cart_price p').innerText();
-    const quantity = await row.locator('.cart_quantity button').innerText();
-    const total = await row.locator('.cart_total_price').innerText();
-    items.push({ name, price, quantity, total });
+  async getCartItemDetails(): Promise<{
+    name: string;
+    price: string;
+    quantity: string;
+    total: string;
+  }[]> {
+    const rows = await this.cartItems.all();
+    const items = [];
+
+    for (const row of rows) {
+      const name = await row.locator('.cart_description h4 a').innerText();
+      const price = await row.locator('.cart_price p').innerText();
+      const quantity = await row.locator('.cart_quantity button').innerText();
+      const total = await row.locator('.cart_total_price').innerText();
+      items.push({ name, price, quantity, total });
+    }
+
+    return items;
   }
-  
-  return items;
-}
 }

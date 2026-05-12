@@ -31,8 +31,30 @@ export class CheckoutPage extends BasePage {
     async placeOrder() {
         await this.placeOrderButton.click();
     }
-    
+
     async expectPaymentPage() {
         await expect(this.page).toHaveURL('/payment');
+    }
+    //to verify delivery and billing details
+    async expectAddressDetails(section: Locator, user: {
+        firstname: string;
+        lastname: string;
+        address1: string;
+        address2: string;
+        city: string;
+        zipcode: string;
+        state: string;
+        country: string;
+        mobile_number: string;
+    }) {
+        await expect(section).toContainText(user.firstname);
+        await expect(section).toContainText(user.lastname);
+        await expect(section).toContainText(user.address1);
+        await expect(section).toContainText(user.address2);
+        await expect(section).toContainText(user.city);
+        await expect(section).toContainText(user.zipcode);
+        await expect(section).toContainText(user.state);
+        await expect(section).toContainText(user.country);
+        await expect(section).toContainText(user.mobile_number);
     }
 }

@@ -1,14 +1,14 @@
 // tests/ui/products.spec.ts
 // UI tests covering product listing, search, and cart interactions
 
-import { test, expect } from '../../fixtures';
-import { PRODUCTS } from '../../data/testData';
+import { test, expect } from '@fixtures/index';
+import { PRODUCTS } from '@data/testData';
 
 test.describe('Products', () => {
-// TC8: Verify All Products and product detail page
-// Split into two focused tests for better failure isolation —
-// if product listing breaks and detail page breaks independently,
-// each failure is immediately identifiable without investigating a combined test
+  // TC8: Verify All Products and product detail page
+  // Split into two focused tests for better failure isolation —
+  // if product listing breaks and detail page breaks independently,
+  // each failure is immediately identifiable without investigating a combined test
   test('should display all products on the products page', async ({ productsPage }) => {
     await productsPage.navigateViaHome(productsPage.navProducts);
 
@@ -36,7 +36,7 @@ test.describe('Products', () => {
     await expect(productDetailsPage.brand).toBeVisible();
   });
 
-//TC9
+  //TC9
   test('should return results for a valid search term', async ({ productsPage }) => {
     await productsPage.navigateViaHome(productsPage.navProducts);
     await productsPage.searchFor(PRODUCTS.searchTerms.anotherValid);
@@ -52,7 +52,7 @@ test.describe('Products', () => {
     });
   });
 
-//TC12 - compared to the example test, this adds 2 same products to verify price total 
+  //TC12 - compared to the example test, this adds 2 same products to verify price total 
   test('should add products to cart and verify totals', async ({ productsPage, cartPage }) => {
     await productsPage.goto();
     const firstProductName = await productsPage.getFirstProductName();
@@ -69,7 +69,7 @@ test.describe('Products', () => {
     await productsPage.addSecondProductToCart();
     // instead of dismissing the modal, we use it to navigate to cart
     await productsPage.navigateToCartFromModal();
-    
+
     const itemCount = await cartPage.getItemCount();
     expect(itemCount).toBe(2);
 
@@ -84,8 +84,8 @@ test.describe('Products', () => {
     const secondItemTotal = parseFloat(secondProductPrice.replace('Rs.', '')) * 2;
     expect(cartItems[1].total).toBe(`Rs. ${secondItemTotal}`);
   });
-//TC13
-    test('should add product to cart from detail page and verify quantity', async ({ productsPage, cartPage, productDetailsPage }) => {
+  //TC13
+  test('should add product to cart from detail page and verify quantity', async ({ productsPage, cartPage, productDetailsPage }) => {
     await productsPage.goto();
     await productsPage.viewFirstProduct();
     await expect(productDetailsPage.addToCartButton).toBeVisible();

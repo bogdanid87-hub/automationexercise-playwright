@@ -1,7 +1,7 @@
 //UI tests covering contact us form interactions
 
-import { test, expect } from '../../fixtures';
-import { CONTACT_US } from '../../data/testData';
+import { test, expect } from '@fixtures/index';
+import { CONTACT_US } from '@data/testData';
 
 
 test.describe('Contact Us', () => {
@@ -23,7 +23,7 @@ test.describe('Contact Us', () => {
     await contactPage.expectSuccessMessage();
     await contactPage.navigateHome();
   });
-  
+
   //Negative test cases for contact form validation use direct url for speed
   test('should show validation error for missing email', async ({ contactPage }) => {
     await contactPage.goto();
@@ -37,7 +37,7 @@ test.describe('Contact Us', () => {
     );
     await contactPage.expectValidationError();
   });
-//Negative test cases for contact form validation use direct url for speed
+  //Negative test cases for contact form validation use direct url for speed
   test('should show validation error for invalid email', async ({ contactPage }) => {
     await contactPage.goto();
     await contactPage.setupDialogHandler();

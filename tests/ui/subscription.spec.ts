@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures';
-import { BasePage } from '../../pages/BasePage';
-import { USERS } from '../../data/testData';
+import { test, expect } from '@fixtures/index';
+import { BasePage } from '@pages/BasePage';
+import { USERS } from '@data/testData';
 
 
 //TC 10
@@ -17,7 +17,7 @@ test.describe('Subscription from Home page', () => {
 });
 //TC 11
 test.describe('Subscription from Cart page', () => {
-  test('should subscribe to newsletter successfully', async ({ page , cartPage }) => {
+  test('should subscribe to newsletter successfully', async ({ page, cartPage }) => {
     const basePage = new BasePage(page);
     await basePage.navigate();
     await basePage.dismissOverlays();
@@ -31,7 +31,7 @@ test.describe('Subscription from Cart page', () => {
 
 
   // extra negative test
-test('should show error for missing email', async ({ page }) => {
+  test('should show error for missing email', async ({ page }) => {
     const basePage = new BasePage(page);
     await basePage.navigate();
     await basePage.dismissOverlays();

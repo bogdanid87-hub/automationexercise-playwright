@@ -37,6 +37,7 @@ export class HomePage extends BasePage {
     await this.page.waitForTimeout(500);
     await addToCartBtn.click();
   }
+  //loads the Home page and verifies it loaded correctly
   async goto() {
     await this.navigate('/');
     await this.dismissOverlays();

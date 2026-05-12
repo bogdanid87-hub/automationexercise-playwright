@@ -96,7 +96,6 @@ test.describe('Place Order', () => {
         // add 2 products to cart
         await addProductsToCart(homePage, cartPage);
         //go to cart
-        await homePage.navCart.click();
         await expect(cartPage.cartTable).toBeVisible();
         //proceed to checkout and chose registration
         await cartPage.proceedToCheckoutButton.click();

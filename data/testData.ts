@@ -78,7 +78,8 @@ export const CONTACT_US = {
     filePath: 'fixtures/testfile.txt', // Ensure this file exists 
   },
   invalidEmail: {
-    email: 'invalid-email',}
+    email: 'invalid-email',
+  }
 } as const;
 
 export const PAYMENT = {
@@ -86,5 +87,5 @@ export const PAYMENT = {
   cardNumber: '4111111111111111', // Visa test card number
   cvc: '123',
   expiryMonth: '12',
-  expiryYear: '2025',
+  expiryYear: '2035',
 } as const;

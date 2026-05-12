@@ -10,7 +10,7 @@ test.describe('Subscription from Home page', () => {
     await basePage.navigate();
     await basePage.dismissOverlays();
 
-    await expect(basePage.subscriptionWidget).toBeVisible;
+    await expect(basePage.subscriptionWidget).toBeVisible();
     await basePage.subscribeToNewsletter(USERS.existing.email);
     await expect(basePage.subscriptionSuccessMessage).toBeVisible();
   });

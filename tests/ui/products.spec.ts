@@ -99,7 +99,7 @@ test.describe('Products', () => {
     await productDetailsPage.dismissAddedToCartModal();
 
     await cartPage.navCart.click()
-    await cartPage.waitForPageLoad;
+    await cartPage.waitForPageLoad();
     const cartItems = await cartPage.getCartItemDetails();
     expect(cartItems[0].quantity).toBe('4');
   });

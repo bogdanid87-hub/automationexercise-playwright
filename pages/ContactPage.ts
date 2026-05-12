@@ -10,7 +10,7 @@ export class ContactPage extends BasePage {
   readonly contactSubmitButton: Locator;
   readonly successMessage: Locator;
 
-    constructor(page: Page) {
+  constructor(page: Page) {
     super(page);
     this.contactName = page.locator('[data-qa="name"]');
     this.contactEmail = page.locator('[data-qa="email"]');
@@ -19,9 +19,9 @@ export class ContactPage extends BasePage {
     this.contactUploadFile = page.locator('[name="upload_file"]');
     this.contactSubmitButton = page.locator('[data-qa="submit-button"]');
     this.successMessage = page.locator('div[class="status alert alert-success"]');
-}
+  }
 
-    async goto() {
+  async goto() {
     await this.navigate('/contact_us');
     await this.dismissOverlays();
     await expect(this.contactSubmitButton).toBeVisible();
@@ -42,7 +42,6 @@ export class ContactPage extends BasePage {
       await this.contactUploadFile.setInputFiles(filePath);
     }
     await this.contactSubmitButton.click();
-    //await this.setupDialogHandler();
   }
 
   async expectSuccessMessage() {
@@ -51,10 +50,10 @@ export class ContactPage extends BasePage {
 
   async expectValidationError() {
     await expect(this.contactEmail).toHaveAttribute('type', 'email');
-    await expect(this.contactEmail).toHaveJSProperty('validity.valueMissing', true); 
+    await expect(this.contactEmail).toHaveJSProperty('validity.valueMissing', true);
     await expect(this.contactEmail).toHaveAttribute('required');
   }
- async expectInvalidEmailError() {
+  async expectInvalidEmailError() {
     await expect(this.contactEmail).toHaveAttribute('type', 'email');
     await expect(this.contactEmail).toHaveJSProperty('validity.typeMismatch', true);
   }

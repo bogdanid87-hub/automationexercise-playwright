@@ -7,6 +7,8 @@ import { CartPage } from '@pages/CartPage';
 import { CheckoutPage } from '@pages/CheckoutPage';
 import { PaymentPage } from '@pages/PaymentPage';
 import { OrderPlacedPage } from '@pages/OrderPlacedPage';
+import { ApiClient } from '@api/ApiClient';
+
 // ─── Helper functions ─────────
 // add 2 products to cart
 async function addProductsToCart(homePage: HomePage, cartPage: CartPage) {
@@ -52,6 +54,29 @@ async function completeOrder(
     await paymentPage.submitPayment();
     await orderPlacedPage.orderConfirmation();
 }
+//register user via API for tests requiring login only 
+async function registerViaAPI(apiClient: ApiClient, user: ReturnType<typeof USERS.newUser>) {
+    const created = await apiClient.createAccount({
+        name: user.name,
+        email: user.email,
+        password: user.password,
+        title: user.title,
+        birth_date: user.birth_date,
+        birth_month: user.birth_month,
+        birth_year: user.birth_year,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        company: user.company,
+        address1: user.address1,
+        address2: user.address2,
+        country: user.country,
+        zipcode: user.zipcode,
+        state: user.state,
+        city: user.city,
+        mobile_number: user.mobile_number,
+    });
+    expect(created.responseCode).toBe(201);
+}
 
 
 test.describe('Place Order', () => {
@@ -88,6 +113,7 @@ test.describe('Place Order', () => {
         await accountDeletedPage.continueToHome();
     });
     //TC15: Place Order: Register before Checkout
+    //also covers TC23: Verify address details in checkout page 
     test('full journey register from home - add products - place order - account delete', async ({
         homePage,
         cartPage,
@@ -124,26 +150,7 @@ test.describe('Place Order', () => {
     }) => {
         //create account using API
         const user = USERS.newUser();
-        const created = await apiClient.createAccount({
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            title: user.title,
-            birth_date: user.birth_date,
-            birth_month: user.birth_month,
-            birth_year: user.birth_year,
-            firstname: user.firstname,
-            lastname: user.lastname,
-            company: user.company,
-            address1: user.address1,
-            address2: user.address2,
-            country: user.country,
-            zipcode: user.zipcode,
-            state: user.state,
-            city: user.city,
-            mobile_number: user.mobile_number,
-        });
-        expect(created.responseCode).toBe(201);
+        await registerViaAPI(apiClient, user)
         //proceed with UI tests
         await homePage.goto();
         //login API account
@@ -158,3 +165,38 @@ test.describe('Place Order', () => {
         await accountDeletedPage.continueToHome();
     });
 });
+//TC24 Download Invoice after purchase order
+test('full journey login API account from home - add products - place order - download invoice - delete account', async ({
+    apiClient,
+    homePage,
+    cartPage,
+    loginPage,
+    paymentPage,
+    checkoutPage,
+    orderPlacedPage,
+    accountDeletedPage,
+    page
+}) => {
+    //create account using API
+    const user = USERS.newUser();
+    await registerViaAPI(apiClient, user)
+    //proceed with UI tests
+    await homePage.goto();
+    //login API account
+    await homePage.navSignupLogin.click();
+    await loginPage.login(user.email, user.password);
+    await expect(homePage.loggedInAsText).toBeVisible();
+    await addProductsToCart(homePage, cartPage);
+    await completeOrder(cartPage, checkoutPage, paymentPage, orderPlacedPage, user);
+    //download invoice
+    const downloadPromise = page.waitForEvent('download');
+    await orderPlacedPage.downloadInvoice();
+    const download = await downloadPromise;
+    //check file name
+    expect(download.suggestedFilename()).toContain('invoice');
+    //delete account
+    await orderPlacedPage.navDeleteAccount.click();
+    await accountDeletedPage.expectAccountDeleted();
+    await accountDeletedPage.continueToHome();
+
+})

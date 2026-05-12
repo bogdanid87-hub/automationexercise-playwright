@@ -111,7 +111,7 @@ test.describe('Products', () => {
     // instead of dismissing the modal, we use it to navigate to cart
     await productsPage.navigateToCartFromModal();
 
-    let itemCount = await cartPage.getItemCount();
+    const itemCount = await cartPage.getItemCount();
     expect(itemCount).toBe(1);
 
     await cartPage.removeItem();

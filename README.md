@@ -32,6 +32,7 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17 |
 | `tests/ui/subscription.spec.ts` | Subscription | TC10, TC11 |
 | `tests/e2e/api-assisted-purchase.spec.ts` | API-assisted purchase flow with UI validation and cross-layer assertions | TC23, TC24 |
+| `tests/ui/bugs.spec.ts` | Documents found bugs | Reloading the cart page restores removed products |
 
 **To be added:**
 - TC7: Verify Test Cases Page

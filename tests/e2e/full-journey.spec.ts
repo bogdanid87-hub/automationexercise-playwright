@@ -79,7 +79,16 @@ async function registerViaAPI(apiClient: ApiClient, user: ReturnType<typeof USER
 }
 
 
-test.describe('Place Order', () => {
+test.describe('Place Order flows', () => {
+    let user: ReturnType<typeof USERS.newUser>;
+
+    test.afterEach(async ({ apiClient }) => {
+        try {
+            await apiClient.deleteAccount(user.email, user.password);
+        } catch {
+            // account may already be deleted or never created — ignore
+        }
+    });
     //TC14: Place Order: Register while Checkout
     test('full journey add prod - register from checkout - place order - account delete', async ({
         homePage,
@@ -91,6 +100,7 @@ test.describe('Place Order', () => {
         orderPlacedPage,
         accountDeletedPage
     }) => {
+        user = USERS.newUser();
         //load the home page
         await homePage.goto();
         // add 2 products to cart
@@ -101,7 +111,7 @@ test.describe('Place Order', () => {
         await cartPage.proceedToCheckoutButton.click();
         await cartPage.registerLoginModal.click();
         // sign up with new user
-        const user = USERS.newUser();
+        // const user = USERS.newUser();
         await userRegistration(loginPage, signupPage, user);
         //go back to cart and proceed with checkout
         await signupPage.navCart.click();
@@ -123,9 +133,10 @@ test.describe('Place Order', () => {
         orderPlacedPage,
         accountDeletedPage
     }) => {
+        user = USERS.newUser();
         await homePage.goto();
         await homePage.navSignupLogin.click();
-        const user = USERS.newUser();
+        //  const user = USERS.newUser();
         await userRegistration(loginPage, signupPage, user);
         await addProductsToCart(homePage, cartPage);
         await completeOrder(cartPage, checkoutPage, paymentPage, orderPlacedPage, user);
@@ -148,7 +159,7 @@ test.describe('Place Order', () => {
         accountDeletedPage
     }) => {
         //create account using API
-        const user = USERS.newUser();
+        user = USERS.newUser();
         await registerViaAPI(apiClient, user)
         //proceed with UI tests
         await homePage.goto();
@@ -163,39 +174,39 @@ test.describe('Place Order', () => {
         await accountDeletedPage.expectAccountDeleted();
         await accountDeletedPage.continueToHome();
     });
-});
-//TC24 Download Invoice after purchase order
-test('full journey login API account from home - add products - place order - download invoice - delete account', async ({
-    apiClient,
-    homePage,
-    cartPage,
-    loginPage,
-    paymentPage,
-    checkoutPage,
-    orderPlacedPage,
-    accountDeletedPage,
-    page
-}) => {
-    //create account using API
-    const user = USERS.newUser();
-    await registerViaAPI(apiClient, user)
-    //proceed with UI tests
-    await homePage.goto();
-    //login API account
-    await homePage.navSignupLogin.click();
-    await loginPage.login(user.email, user.password);
-    await expect(homePage.loggedInAsText).toBeVisible();
-    await addProductsToCart(homePage, cartPage);
-    await completeOrder(cartPage, checkoutPage, paymentPage, orderPlacedPage, user);
-    //download invoice
-    const downloadPromise = page.waitForEvent('download');
-    await orderPlacedPage.downloadInvoice();
-    const download = await downloadPromise;
-    //check file name
-    expect(download.suggestedFilename()).toContain('invoice');
-    //delete account
-    await orderPlacedPage.navDeleteAccount.click();
-    await accountDeletedPage.expectAccountDeleted();
-    await accountDeletedPage.continueToHome();
 
+    //TC24 Download Invoice after purchase order
+    test('full journey login API account from home - add products - place order - download invoice - delete account', async ({
+        apiClient,
+        homePage,
+        cartPage,
+        loginPage,
+        paymentPage,
+        checkoutPage,
+        orderPlacedPage,
+        accountDeletedPage,
+        page
+    }) => {
+        //create account using API
+        user = USERS.newUser();
+        await registerViaAPI(apiClient, user)
+        //proceed with UI tests
+        await homePage.goto();
+        //login API account
+        await homePage.navSignupLogin.click();
+        await loginPage.login(user.email, user.password);
+        await expect(homePage.loggedInAsText).toBeVisible();
+        await addProductsToCart(homePage, cartPage);
+        await completeOrder(cartPage, checkoutPage, paymentPage, orderPlacedPage, user);
+        //download invoice
+        const downloadPromise = page.waitForEvent('download');
+        await orderPlacedPage.downloadInvoice();
+        const download = await downloadPromise;
+        //check file name
+        expect(download.suggestedFilename()).toContain('invoice');
+        //delete account
+        await orderPlacedPage.navDeleteAccount.click();
+        await accountDeletedPage.expectAccountDeleted();
+        await accountDeletedPage.continueToHome();
+    });
 })

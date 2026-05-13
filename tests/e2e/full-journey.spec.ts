@@ -111,7 +111,6 @@ test.describe('Place Order flows', () => {
         await cartPage.proceedToCheckoutButton.click();
         await cartPage.registerLoginModal.click();
         // sign up with new user
-        // const user = USERS.newUser();
         await userRegistration(loginPage, signupPage, user);
         //go back to cart and proceed with checkout
         await signupPage.navCart.click();
@@ -136,7 +135,6 @@ test.describe('Place Order flows', () => {
         user = USERS.newUser();
         await homePage.goto();
         await homePage.navSignupLogin.click();
-        //  const user = USERS.newUser();
         await userRegistration(loginPage, signupPage, user);
         await addProductsToCart(homePage, cartPage);
         await completeOrder(cartPage, checkoutPage, paymentPage, orderPlacedPage, user);

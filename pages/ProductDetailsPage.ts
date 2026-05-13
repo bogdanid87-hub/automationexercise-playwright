@@ -1,6 +1,9 @@
 import { Page, Locator, expect } from '@playwright/test';
 import { ProductListingPage } from './ProductListingPage';
 
+// Extends ProductListingPage for sidebar, modal, and shared nav.
+// product grid locators (productCards, productOverlays) are inherited
+// but unused — the detail page has no product listing
 export class ProductDetailsPage extends ProductListingPage {
     readonly productName: Locator;
     readonly productCategory: Locator;

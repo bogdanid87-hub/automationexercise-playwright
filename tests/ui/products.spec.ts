@@ -9,8 +9,9 @@ test.describe('Products', () => {
   // Split into two focused tests for better failure isolation —
   // if product listing breaks and detail page breaks independently,
   // each failure is immediately identifiable without investigating a combined test
-  test('should display all products on the products page', async ({ productsPage }) => {
-    await productsPage.navigateViaHome(productsPage.navProducts);
+  test('should display all products on the products page', async ({ homePage, productsPage }) => {
+    await homePage.goto();
+    await homePage.navProducts.click();
 
     const count = await productsPage.getProductCount();
     expect(count).toBeGreaterThan(0);
@@ -19,10 +20,12 @@ test.describe('Products', () => {
   test('should show product detail page when clicking View Product', async ({
     productsPage,
     productDetailsPage,
+    homePage
   }) => {
-    await productsPage.navigateViaHome(productsPage.navProducts);
-    await expect(productsPage.productsPageTitle).toBeVisible();
-    await expect(productsPage.productsPageTitle).toHaveText('All Products'); // Ensure we're on the products page before interacting
+    await homePage.goto();
+    await homePage.navProducts.click();
+    await expect(productsPage.pageTitle).toBeVisible();
+    await expect(productsPage.pageTitle).toHaveText('All Products'); // Ensure we're on the products page before interacting
     const productName = await productsPage.getFirstProductName(); // Capture the name of the first product to verify on the detail page
     const productPrice = await productsPage.getFirstProductPrice(); // Capture the price of the first product to verify on the detail page
     await productsPage.viewFirstProduct();
@@ -37,12 +40,13 @@ test.describe('Products', () => {
   });
 
   //TC9
-  test('should return results for a valid search term', async ({ productsPage }) => {
-    await productsPage.navigateViaHome(productsPage.navProducts);
+  test('should return results for a valid search term', async ({ homePage, productsPage }) => {
+    await homePage.goto();
+    await homePage.navProducts.click();
     await productsPage.searchFor(PRODUCTS.searchTerms.anotherValid);
 
-    await expect(productsPage.productsPageTitle).toBeVisible();
-    await expect(productsPage.productsPageTitle).toHaveText('Searched Products');
+    await expect(productsPage.pageTitle).toBeVisible();
+    await expect(productsPage.pageTitle).toHaveText('Searched Products');
 
     const count = await productsPage.getProductCount();
     expect(count).toBeGreaterThan(0);

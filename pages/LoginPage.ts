@@ -38,15 +38,13 @@ export class LoginPage extends BasePage {
     await this.dismissOverlays();
     await expect(this.loginButton).toBeVisible();
   }
-async loginViaHome() {
-  await this.navigateViaHome(this.navSignupLogin);
-}
-async loginPageLoaded() {
-  await expect(this.loginForm).toBeVisible();
-  await expect(this.signupForm).toBeVisible();
-  await expect(this.loginForm).toHaveText('Login to your account');
-  await expect(this.signupForm).toHaveText('New User Signup!');
-}
+
+  async loginPageLoaded() {
+    await expect(this.loginForm).toBeVisible();
+    await expect(this.signupForm).toBeVisible();
+    await expect(this.loginForm).toHaveText('Login to your account');
+    await expect(this.signupForm).toHaveText('New User Signup!');
+  }
 
   async login(email: string, password: string) {
     await this.loginEmail.fill(email);
@@ -68,7 +66,7 @@ async loginPageLoaded() {
     await expect(this.signupErrorText).toBeVisible();
   }
   async expectOnLoginPage() {
-  await expect(this.page).toHaveURL('/login');
-}
+    await expect(this.page).toHaveURL('/login');
+  }
 
 }

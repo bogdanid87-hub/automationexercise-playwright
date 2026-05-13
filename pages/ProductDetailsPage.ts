@@ -1,7 +1,7 @@
 import { Page, Locator, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { ProductListingPage } from './ProductListingPage';
 
-export class ProductDetailsPage extends BasePage {
+export class ProductDetailsPage extends ProductListingPage {
     readonly productName: Locator;
     readonly productCategory: Locator;
     readonly productPrice: Locator;
@@ -19,7 +19,7 @@ export class ProductDetailsPage extends BasePage {
 
     constructor(page: Page) {
         super(page);
-        this.productName = page.locator('.product-information h2'); 
+        this.productName = page.locator('.product-information h2');
         this.productCategory = page.locator('p:has-text("Category:")');
         this.productPrice = page.locator('.product-information span span');
         this.quantityInput = page.locator('#quantity');
@@ -30,33 +30,33 @@ export class ProductDetailsPage extends BasePage {
         this.writeReviewTab = page.locator('a:has-text("Write Your Review")');
         this.reviewName = page.locator('#name');
         this.reviewEmail = page.locator('#email');
-        this.reviewText = page.locator('#review');  
+        this.reviewText = page.locator('#review');
         this.reviewSubmitButton = page.locator('#button-review');
         this.reviewSuccessMessage = page.locator('#review-section .alert-success');
     }
 
-async setQuantity(quantity: number) {
-  await this.quantityInput.fill(quantity.toString());
-}
+    async setQuantity(quantity: number) {
+        await this.quantityInput.fill(quantity.toString());
+    }
 
-async incrementQuantity() {
-    await this.quantityInput.press('ArrowUp');
-}
+    async incrementQuantity() {
+        await this.quantityInput.press('ArrowUp');
+    }
 
-async decrementQuantity() {
-    await this.quantityInput.press('ArrowDown');
-}
+    async decrementQuantity() {
+        await this.quantityInput.press('ArrowDown');
+    }
 
-async addToCart() {
-    await expect(this.addToCartButton).toBeVisible();
-  await this.addToCartButton.click();
-}
+    async addToCart() {
+        await expect(this.addToCartButton).toBeVisible();
+        await this.addToCartButton.click();
+    }
 
-async writeReview(name: string, email: string, text: string) {
-    await this.writeReviewTab.click();
-    await this.reviewName.fill(name);
-    await this.reviewEmail.fill(email);
-    await this.reviewText.fill(text);
-    await this.reviewSubmitButton.click();
-}
+    async writeReview(name: string, email: string, text: string) {
+        await this.writeReviewTab.click();
+        await this.reviewName.fill(name);
+        await this.reviewEmail.fill(email);
+        await this.reviewText.fill(text);
+        await this.reviewSubmitButton.click();
+    }
 }

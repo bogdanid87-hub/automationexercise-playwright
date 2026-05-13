@@ -19,7 +19,6 @@ export class BasePage {
   readonly subscriptionEmail: Locator;
   readonly subscriptionButton: Locator;
   readonly subscriptionSuccessMessage: Locator;
-  readonly homeCarousel: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -35,12 +34,11 @@ export class BasePage {
     this.subscriptionEmail = page.locator('#susbscribe_email');
     this.subscriptionButton = page.locator('#subscribe');
     this.subscriptionSuccessMessage = page.locator('#success-subscribe');
-    this.homeCarousel = page.locator('#slider-carousel');
   }
 
-async navigate(path: string = '/') {
-  await this.page.goto(path, { waitUntil: 'domcontentloaded' });
-}
+  async navigate(path: string = '/') {
+    await this.page.goto(path, { waitUntil: 'domcontentloaded' });
+  }
 
   async isLoggedIn(): Promise<boolean> {
     return this.loggedInAsText.isVisible();
@@ -50,85 +48,65 @@ async navigate(path: string = '/') {
     await this.navLogout.click();
   }
 
-async navigateViaHome(navLink: Locator) {
-  await this.navigate();
-  await this.dismissOverlays();
-  await expect(this.page).toHaveURL('/');  // assert we're on home first
-  await expect(this.homeCarousel).toBeVisible();  // ensure home page loaded
-  await navLink.click();
-  await this.waitForPageLoad();
-}
+  async navigateHome() {
+    await this.navHome.click();
+    await this.waitForPageLoad();
+    await expect(this.page).toHaveURL('/');
+  }
 
-async navigateHome() {
-  await this.navHome.click();
- // await this.dismissOverlays();
-  await this.waitForPageLoad();
-  await expect(this.page).toHaveURL('/');
-}
-  
 
-async waitForPageLoad() {
-  // 'load' can timeout due to continuous background network activity from ads
-  // 'domcontentloaded' fires when HTML is parsed and DOM is ready
-  await this.page.waitForLoadState('domcontentloaded');
-}
+  async waitForPageLoad() {
+    // 'load' can timeout due to continuous background network activity from ads
+    // 'domcontentloaded' fires when HTML is parsed and DOM is ready
+    await this.page.waitForLoadState('domcontentloaded');
+  }
 
 
   // Dismiss cookie/ad overlays that may block interactions
-async dismissOverlays() {
-  // consent banner
-  const consentBtn = this.page.locator('button:has-text("Consent")');
-  const isConsentVisible = await consentBtn.isVisible({ timeout: 2000 }).catch(() => false);
-  if (isConsentVisible) {
-    await consentBtn.click();
+  async dismissOverlays() {
+    // consent banner
+    const consentBtn = this.page.locator('button:has-text("Consent")');
+    const isConsentVisible = await consentBtn.isVisible({ timeout: 2000 }).catch(() => false);
+    if (isConsentVisible) {
+      await consentBtn.click();
+    }
+    // Google survey overlay
+    const surveyClose = this.page.locator('text=Close');
+    const isSurveyVisible = await surveyClose.isVisible({ timeout: 2000 }).catch(() => false);
+    if (isSurveyVisible) {
+      await surveyClose.click();
+    }
+    // ad popup with Close button
+    const closeBtn = this.page.locator('button:has-text("Close"), a:has-text("Close")');
+    const isCloseVisible = await closeBtn.isVisible({ timeout: 2000 }).catch(() => false);
+    if (isCloseVisible) {
+      await closeBtn.click();
+    }
+    // Google ad popup dismiss button
+    const adDismiss = this.page.locator('#dismiss-button');
+    const isAdVisible = await adDismiss.isVisible({ timeout: 2000 }).catch(() => false);
+    if (isAdVisible) {
+      await adDismiss.click();
+    }
   }
-  // Google survey overlay
-  const surveyClose = this.page.locator('text=Close');
-  const isSurveyVisible = await surveyClose.isVisible({ timeout: 2000 }).catch(() => false);
-  if (isSurveyVisible) {
-    await surveyClose.click();
-  }
-  // ad popup with Close button
-  const closeBtn = this.page.locator('button:has-text("Close"), a:has-text("Close")');
-  const isCloseVisible = await closeBtn.isVisible({ timeout: 2000 }).catch(() => false);
-  if (isCloseVisible) {
-    await closeBtn.click();
-  }
-  // Google ad popup dismiss button
-  const adDismiss = this.page.locator('#dismiss-button');
-  const isAdVisible = await adDismiss.isVisible({ timeout: 2000 }).catch(() => false);
-  if (isAdVisible) {
-    await adDismiss.click();
-  }
-}
-
-async dismissAddedToCartModal() {
-  const continueBtn = this.page.locator('button:has-text("Continue Shopping")');
-  await continueBtn.click();
-}
-
-async navigateToCartFromModal() {
-  const viewCartBtn = this.page.locator('.text-center:has-text("View Cart")');
-  await viewCartBtn.click();
-}
 
   async subscribeToNewsletter(email: string) {
     await this.page.evaluate(() => {
-    (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
-  });
-  await this.page.waitForTimeout(500);
-  await this.subscriptionEmail.fill(email);
-  await this.subscriptionButton.click();
-}
+      (document.querySelector('#footer') as HTMLElement)?.scrollIntoView();
+    });
+    await this.page.waitForTimeout(500);
+    await this.subscriptionEmail.fill(email);
+    await this.subscriptionButton.click();
+  }
 
   async expectSubscriptionSuccess() {
     await this.subscriptionSuccessMessage.waitFor({ state: 'visible', timeout: 2000 });
-    await expect(this.subscriptionSuccessMessage).toHaveText('You have been successfully subscribed!'); 
+    await expect(this.subscriptionSuccessMessage).toHaveText('You have been successfully subscribed!');
     await this.subscriptionSuccessMessage.waitFor({ state: 'hidden', timeout: 2000 }); // Wait for the message to disappear
   }
   async expectSubscriptionMissingEmailError() {
     await expect(this.subscriptionEmail).toHaveAttribute('type', 'email');
-    await expect(this.subscriptionEmail).toHaveJSProperty('validity.valueMissing', true); 
+    await expect(this.subscriptionEmail).toHaveJSProperty('validity.valueMissing', true);
     await expect(this.subscriptionEmail).toHaveAttribute('required');
   }
   async expectSubscriptionInvalidEmailError() {
@@ -136,6 +114,6 @@ async navigateToCartFromModal() {
     await expect(this.subscriptionEmail).toHaveJSProperty('validity.typeMismatch', true);
   }
   async expectURL(pattern: string | RegExp) {
-  await expect(this.page).toHaveURL(pattern);
-}
+    await expect(this.page).toHaveURL(pattern);
+  }
 }

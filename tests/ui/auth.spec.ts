@@ -9,6 +9,7 @@ test.describe('Authentication', () => {
   // TC1
   test.describe('Registration full flow', () => {
     test('should register a new user, delete it and land on home page', async ({
+      homePage,
       loginPage,
       signupPage,
       accountDeletedPage,
@@ -16,7 +17,8 @@ test.describe('Authentication', () => {
     }) => {
 
       const user = USERS.newUser();
-      await loginPage.navigateViaHome(loginPage.navSignupLogin);
+      await homePage.goto();
+      await homePage.navSignupLogin.click();
       await loginPage.loginPageLoaded(); // Ensure both forms are visible before interacting
       await loginPage.startSignup(user.name, user.email);
       await signupPage.signupLoaded(); // Wait for the account details form to load before filling it out
@@ -64,8 +66,9 @@ test.describe('Authentication', () => {
   // to avoid race conditions between 
   // create and login in parallel test runs
   test.describe('Login', () => {
-    test('should log in with valid credentials', async ({ loginPage }) => {
-      await loginPage.navigateViaHome(loginPage.navSignupLogin);
+    test('should log in with valid credentials', async ({ homePage, loginPage }) => {
+      await homePage.goto();
+      await homePage.navSignupLogin.click();
       await loginPage.loginPageLoaded(); // Ensure both forms are visible before interacting
       await loginPage.login(USERS.existing.email, USERS.existing.password);
 

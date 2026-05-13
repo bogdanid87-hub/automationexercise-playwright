@@ -122,6 +122,27 @@ test.describe('Products', () => {
 
     await cartPage.expectCartIsEmpty();
   });
+  //TC18 view category products
+  test('view category products', async ({ homePage, categoryProductsPage }) => {
+    await homePage.goto();
+    await expect(homePage.sidebar.categoryMenuTitle).toBeVisible();
+    await homePage.sidebar.clickCategory('Women');
+    await homePage.sidebar.clickSubcategory('Dress');
+    await expect(categoryProductsPage.pageTitle).toHaveText("Women - Dress Products");
+    await categoryProductsPage.sidebar.clickCategory("Men");
+    await categoryProductsPage.sidebar.clickSubcategory("Jeans");
+    await expect(categoryProductsPage.pageTitle).toHaveText("Men - Jeans Products");
+  })
+  //TC19 view Brand products
+  test('view brand products', async ({ homePage, brandsProductsPage }) => {
+    await homePage.goto();
+    await expect(homePage.sidebar.brandMenuTitle).toBeVisible();
+    await homePage.sidebar.clickBrand("Polo");
+    await expect(brandsProductsPage.pageTitle).toHaveText("Brand - Polo Products");
+
+
+  })
+
   //additional test - add products to cart using keyboard arrow keys
   test('should add product to cart using keyboard navigation', async ({ productsPage, productDetailsPage, cartPage }) => {
     await productsPage.goto();

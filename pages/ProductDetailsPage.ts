@@ -17,6 +17,7 @@ export class ProductDetailsPage extends ProductListingPage {
     readonly reviewSubmitButton: Locator;
     readonly reviewSuccessMessage: Locator;
 
+
     constructor(page: Page) {
         super(page);
         this.productName = page.locator('.product-information h2');
@@ -33,6 +34,7 @@ export class ProductDetailsPage extends ProductListingPage {
         this.reviewText = page.locator('#review');
         this.reviewSubmitButton = page.locator('#button-review');
         this.reviewSuccessMessage = page.locator('#review-section .alert-success');
+
     }
 
     async setQuantity(quantity: number) {

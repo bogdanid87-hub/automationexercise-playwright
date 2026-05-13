@@ -1,37 +1,21 @@
 import { Page, Locator } from '@playwright/test';
 
 export class SidebarComponent {
-  //category
-  readonly categoryTitle: Locator;
-  readonly categoryWomen: Locator;
-  readonly categoryMen: Locator;
-  readonly categoryKids: Locator;
-  //brands
-  readonly brandsTitle: Locator;
-  readonly brandPolo: Locator;
-  readonly brandHM: Locator;
-  //women sub-category
-  readonly womenDress: Locator;
-  //men sub-category
-  readonly menJeans: Locator;
-
-
-
+  readonly categoryMenuTitle: Locator;
+  readonly brandMenuTitle: Locator;
 
   constructor(private readonly page: Page) {
-    this.categoryTitle = page.locator('.left-sidebar h2:has-text("Category")');
-    this.categoryWomen = page.getByRole('link', { name: 'Women' })
-    this.categoryMen = page.getByRole('link', { name: 'Men', exact: true })
-    this.categoryKids = page.locator('.left-sidebar a:has-text("Kids")');
-    this.brandsTitle = page.locator('.left-sidebar a:has-text("Brands")');
-    this.brandPolo = page.locator('.brands-name a:has-text("Polo")');
-    this.brandHM = page.locator('.brands-name a:has-text("H&M")');
-    this.womenDress = page.locator('#Women a:has-text("Dress")');
-    this.menJeans = page.locator('#Men a:has-text("Jeans")');
+    this.categoryMenuTitle = page.locator('.left-sidebar h2:has-text("Category")');
+    this.brandMenuTitle = page.locator('.brands_products h2:has-text("Brands")');
   }
 
   async clickCategory(name: string) {
-    await this.page.locator(`.left-sidebar a:has-text("${name}")`).click();
+    await this.page.locator(`a[href="#${name}"]`).click();
+    // wait for subcategory panel to expand
+    await this.page.locator(`.panel-collapse.in`).waitFor({ state: 'visible' });
+  }
+  async clickSubcategory(name: string) {
+    await this.page.locator(`.panel-collapse.in a:has-text("${name}")`).click();
   }
 
   async clickBrand(name: string) {

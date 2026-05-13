@@ -14,7 +14,9 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { OrderPlacedPage } from '../pages/OrderPlacedPage';
 import { AccountDeletedPage } from '../pages/AccountDeletedPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage';
-import { HomePage } from '@pages/HomePage';
+import { HomePage } from '../pages/HomePage';
+import { CategoryProductsPage } from '../pages/CategoryProductsPage';
+import { BrandsProductsPage } from '../pages/BrandsProductsPage';
 
 
 type Fixtures = {
@@ -31,6 +33,8 @@ type Fixtures = {
   accountDeletedPage: AccountDeletedPage;
   productDetailsPage: ProductDetailsPage;
   homePage: HomePage;
+  categoryProductsPage: CategoryProductsPage;
+  brandsProductsPage: BrandsProductsPage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -89,7 +93,13 @@ export const test = base.extend<Fixtures>({
   homePage: async ({ page }, use) => {
     await use(new HomePage(page));
   },
+  categoryProductsPage: async ({ page }, use) => {
+    await use(new CategoryProductsPage(page));
+  },
+  brandsProductsPage: async ({ page }, use) => {
+    await use(new BrandsProductsPage(page));
+  }
 });
-  
+
 
 export { expect } from '@playwright/test';

@@ -36,9 +36,6 @@ This suite covers API tests, UI tests around authentication, products and contac
 
 **To be added:**
 - TC7: Verify Test Cases Page
-- TC20: Search Products and Verify Cart After Login
-- TC21: Add review on product
-- TC22: Add to cart from Recommended items
 - TC25: Scroll Up using Arrow button and Scroll Down
 - TC26: Scroll Up without Arrow button and Scroll Down
 - Visual regression on product details page, login/signup and contact us

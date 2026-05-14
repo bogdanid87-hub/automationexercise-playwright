@@ -33,12 +33,12 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/ui/subscription.spec.ts` | Subscription | TC10, TC11 |
 | `tests/e2e/api-assisted-purchase.spec.ts` | API-assisted purchase flow with UI validation and cross-layer assertions | - |
 | `tests/e2e/full-journey.spec.ts` | Full journey for purchase | TC14, TC15, TC16, TC20, TC23, TC24 |
+| `tests/visual` | Visual tests for 1st product details, login/signup, contactus, empty cart, cart with the 1st product | — |
 
 **To be added:**
 - TC7: Verify Test Cases Page
 - TC25: Scroll Up using Arrow button and Scroll Down
 - TC26: Scroll Up without Arrow button and Scroll Down
-- Visual regression on product details page, login/signup and contact us
 
 ---
 
@@ -70,3 +70,4 @@ npx playwright test tests
 - In order to better validate possible fails and speed up tests, I have opted out to not follow strictly the example test cases; for example, some tests will use goto instead of UI navigation, if the UI navigation was already tested in another test
 - I have chosen to block ads, as they were randomly breaking tests (they were waiting for Playwright to finish before being displayed)
 - configured to run on Chromium only for speed
+- visual regression tests use Playwright built-in `toHaveScreenshot() - baseline screenshots are committed to the repo and compared against on each CI run

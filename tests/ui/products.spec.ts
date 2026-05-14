@@ -3,6 +3,7 @@
 
 import { test, expect } from '@fixtures/index';
 import { PRODUCTS } from '@data/testData';
+import { BrandsProductsPage } from '@pages/BrandsProductsPage';
 
 test.describe('Products', () => {
   // TC8: Verify All Products and product detail page
@@ -26,6 +27,9 @@ test.describe('Products', () => {
     await homePage.navProducts.click();
     await expect(productsPage.pageTitle).toBeVisible();
     await expect(productsPage.pageTitle).toHaveText('All Products'); // Ensure we're on the products page before interacting
+    //check the correct ad is up
+    await expect(productsPage.advertisement).toBeVisible();
+    await expect(productsPage.advertisement.locator('img')).toHaveAttribute('src', '/static/images/shop/sale.jpg');
     const productName = await productsPage.getFirstProductName(); // Capture the name of the first product to verify on the detail page
     const productPrice = await productsPage.getFirstProductPrice(); // Capture the price of the first product to verify on the detail page
     await productsPage.viewFirstProduct();
@@ -129,9 +133,12 @@ test.describe('Products', () => {
     await homePage.sidebar.clickCategory('Women');
     await homePage.sidebar.clickSubcategory('Dress');
     await expect(categoryProductsPage.pageTitle).toHaveText("Women - Dress Products");
+    await expect(categoryProductsPage.breadcrumbLink).toBeVisible();
+    await categoryProductsPage.expectBreadcrumb("Women", "Dress");
     await categoryProductsPage.sidebar.clickCategory("Men");
     await categoryProductsPage.sidebar.clickSubcategory("Jeans");
     await expect(categoryProductsPage.pageTitle).toHaveText("Men - Jeans Products");
+    await categoryProductsPage.expectBreadcrumb("Men", "Jeans");
   })
   //TC19 view Brand products
   test('view brand products', async ({ homePage, brandsProductsPage }) => {
@@ -139,6 +146,8 @@ test.describe('Products', () => {
     await expect(homePage.sidebar.brandMenuTitle).toBeVisible();
     await homePage.sidebar.clickBrand("Polo");
     await expect(brandsProductsPage.pageTitle).toHaveText("Brand - Polo Products");
+    await brandsProductsPage.expectBreadcrumb('Polo');
+    await expect(brandsProductsPage.breadcrumbLink).toBeVisible();
 
 
   })

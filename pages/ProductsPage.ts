@@ -25,6 +25,7 @@ export class ProductsPage extends ProductListingPage {
   }
 
   async searchFor(term: string) {
+    await this.waitForPageLoad();
     await this.searchInput.fill(term);
     await this.searchButton.click();
     await expect(this.searchedProductsHeader).toBeVisible();

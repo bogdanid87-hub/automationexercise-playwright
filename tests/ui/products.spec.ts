@@ -3,6 +3,7 @@
 
 import { test, expect } from '../../fixtures/index';
 import { PRODUCTS } from '../../data/testData';
+import { USERS } from '../../data/testData';
 
 test.describe('Products', () => {
   // TC8: Verify All Products and product detail page
@@ -164,6 +165,24 @@ test.describe('Products', () => {
     await cartPage.goto();
     const cartItems = await cartPage.getCartItemDetails();
     expect(cartItems[0].quantity).toBe('2'); // Quantity should be 2 after incrementing
+  });
+  //TC21 add review on product
+  //skips some of the steps in the example test case
+  //as those have already been asserted multiple times
+  test('should add review on product', async ({ productsPage, productDetailsPage }) => {
+    await productsPage.goto();
+    await productsPage.viewFirstProduct();
+    await expect(productDetailsPage.writeReviewTab).toBeVisible();
+    await productDetailsPage.writeReview('User Name', 'email@adress.com', 'Review text');
+    await expect(productDetailsPage.reviewSuccessMessage).toBeVisible();
+    await expect(productDetailsPage.reviewSuccessMessage).toHaveText('Thank you for your review.');
+  });
+  //Negative test for review email field
+  test('should show error for invalid email in review form', async ({ productsPage, productDetailsPage }) => {
+    await productsPage.goto();
+    await productsPage.viewFirstProduct();
+    await productDetailsPage.writeReview('John Doe', 'notanemail', 'Great product!');
+    await expect(productDetailsPage.reviewEmail).toHaveJSProperty('validity.typeMismatch', true);
   });
 
 });   

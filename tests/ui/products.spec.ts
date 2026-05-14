@@ -183,6 +183,17 @@ test.describe('Products', () => {
     await productsPage.viewFirstProduct();
     await productDetailsPage.writeReview('John Doe', 'notanemail', 'Great product!');
     await expect(productDetailsPage.reviewEmail).toHaveJSProperty('validity.typeMismatch', true);
+  });//TC22 Add to cart from Recommended items
+  test('should add products from recommended items carousel', async ({ homePage, cartPage }) => {
+    await homePage.goto();
+    await homePage.recommendedCarousel.scrollIntoViewIfNeeded();
+    await expect(homePage.recommendedTitle).toHaveText('recommended items');
+    const productName = await homePage.getRecommendedProductName();
+    await homePage.addRecommendedProductToCart();
+    await homePage.dismissAddedToCartModal();
+    await homePage.navCart.click();
+    const cartItems = await cartPage.getCartItemDetails();
+    expect(cartItems[0].name).toBe(productName);
   });
 
 });   

@@ -29,10 +29,10 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/api` | Products, brands, search and user account lifecycle | — |
 | `tests/ui/auth.spec.ts` | Authentication | TC1, TC2, TC3, TC4, TC5 |
 | `tests/ui/contactus.spec.ts` | Contact Us | TC6 |
-| `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17, TC18, TC19 |
+| `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17, TC18, TC19, TC21, TC22 |
 | `tests/ui/subscription.spec.ts` | Subscription | TC10, TC11 |
 | `tests/e2e/api-assisted-purchase.spec.ts` | API-assisted purchase flow with UI validation and cross-layer assertions | - |
-| `tests/e2e/full-journey.spec.ts` | Full journey for purchase | TC14, TC15, TC16, TC23, TC24 |
+| `tests/e2e/full-journey.spec.ts` | Full journey for purchase | TC14, TC15, TC16, TC20, TC23, TC24 |
 
 **To be added:**
 - TC7: Verify Test Cases Page

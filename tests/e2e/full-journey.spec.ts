@@ -1,13 +1,13 @@
-import { test, expect } from '@fixtures/index';
-import { PAYMENT, PRODUCTS, USERS } from '@data/testData';
-import { HomePage } from '@pages/HomePage';
-import { LoginPage } from '@pages/LoginPage';
-import { SignupPage } from '@pages/SignupPage';
-import { CartPage } from '@pages/CartPage';
-import { CheckoutPage } from '@pages/CheckoutPage';
-import { PaymentPage } from '@pages/PaymentPage';
-import { OrderPlacedPage } from '@pages/OrderPlacedPage';
-import { ApiClient } from '@api/ApiClient';
+import { test, expect } from '../../fixtures/index';
+import { PAYMENT, PRODUCTS, USERS } from '../../data/testData';
+import { HomePage } from '../../pages/HomePage';
+import { LoginPage } from '../../pages/LoginPage';
+import { SignupPage } from '../../pages/SignupPage';
+import { CartPage } from '../../pages/CartPage';
+import { CheckoutPage } from '../../pages/CheckoutPage';
+import { PaymentPage } from '../../pages/PaymentPage';
+import { OrderPlacedPage } from '../../pages/OrderPlacedPage';
+import { ApiClient } from '../../api/ApiClient';
 
 // ─── Helper functions ─────────
 // add 2 products to cart

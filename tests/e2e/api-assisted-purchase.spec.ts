@@ -12,14 +12,14 @@
 // Note: Some steps use direct URL navigation for speed and reliability
 // rather than full UI navigation flows, which are covered in dedicated UI tests
 
-import { test, expect } from '@fixtures/index';
-import { PAYMENT, PRODUCTS, USERS } from '@data/testData';
-import { LoginPage } from '@pages/LoginPage';
-import { ProductsPage } from '@pages/ProductsPage';
-import { CartPage } from '@pages/CartPage';
-import { CheckoutPage } from '@pages/CheckoutPage';
-import { PaymentPage } from '@pages/PaymentPage';
-import { OrderPlacedPage } from '@pages/OrderPlacedPage';
+import { test, expect } from '../../fixtures/index';
+import { PAYMENT, PRODUCTS, USERS } from '../../data/testData';
+import { LoginPage } from '../../pages/LoginPage';
+import { ProductsPage } from '../../pages/ProductsPage';
+import { CartPage } from '../../pages/CartPage';
+import { CheckoutPage } from '../../pages/CheckoutPage';
+import { PaymentPage } from '../../pages/PaymentPage';
+import { OrderPlacedPage } from '../../pages/OrderPlacedPage';
 
 test.describe('API assisted purchase (UI + API cross-validation)', () => {
 

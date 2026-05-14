@@ -1,7 +1,7 @@
 //UI tests covering contact us form interactions
 
-import { test, expect } from '@fixtures/index';
-import { CONTACT_US } from '@data/testData';
+import { test, expect } from '../../fixtures/index';
+import { CONTACT_US } from '../../data/testData';
 
 
 test.describe('Contact Us', () => {

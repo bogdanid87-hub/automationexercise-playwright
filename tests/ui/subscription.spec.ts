@@ -1,6 +1,6 @@
-import { test, expect } from '@fixtures/index';
-import { BasePage } from '@pages/BasePage';
-import { USERS } from '@data/testData';
+import { test, expect } from '../../fixtures/index';
+import { BasePage } from '../../pages/BasePage';
+import { USERS } from '../../data/testData';
 
 
 //TC 10

@@ -1,8 +1,8 @@
 // tests/api/user.api.spec.ts
 // API tests for user management endpoints
 //console.log(process.env.TEST_USER_EMAIL);
-import { test, expect } from '@fixtures/index';
-import { USERS } from '@data/testData';
+import { test, expect } from '../../fixtures/index';
+import { USERS } from '../../data/testData';
 
 test.describe('API — User / Auth', () => {
 

@@ -1,8 +1,8 @@
 // tests/api/products.api.spec.ts
 // Pure API tests — no browser, just Playwright's request context
 
-import { test, expect } from '@fixtures/index';
-import { PRODUCTS } from '@data/testData';
+import { test, expect } from '../../fixtures/index';
+import { PRODUCTS } from '../../data/testData';
 
 test.describe('API — Products', () => {
 

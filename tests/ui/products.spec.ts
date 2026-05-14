@@ -1,9 +1,8 @@
 // tests/ui/products.spec.ts
 // UI tests covering product listing, search, and cart interactions
 
-import { test, expect } from '@fixtures/index';
-import { PRODUCTS } from '@data/testData';
-import { BrandsProductsPage } from '@pages/BrandsProductsPage';
+import { test, expect } from '../../fixtures/index';
+import { PRODUCTS } from '../../data/testData';
 
 test.describe('Products', () => {
   // TC8: Verify All Products and product detail page

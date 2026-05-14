@@ -1,8 +1,8 @@
 // tests/ui/auth.spec.ts
 // UI tests covering login, signup, and logout flows
 
-import { test, expect } from '@fixtures/index';
-import { USERS } from '@data/testData';
+import { test, expect } from '../../fixtures/index';
+import { USERS } from '../../data/testData';
 
 
 test.describe('Authentication', () => {

@@ -25,7 +25,7 @@ export class BasePage {
     this.navHome = page.locator('a[href="/"]').first();
     this.navProducts = page.locator('a[href="/products"]');
     this.navCart = page.locator('header a[href="/view_cart"]');
-    this.navSignupLogin = page.locator('a[href="/login"]');
+    this.navSignupLogin = page.getByRole('link', { name: 'Signup / Login' });
     this.navLogout = page.locator('a[href="/logout"]');
     this.navDeleteAccount = page.locator('a[href="/delete_account"]');
     this.loggedInAsText = page.locator('li:has-text("Logged in as")');

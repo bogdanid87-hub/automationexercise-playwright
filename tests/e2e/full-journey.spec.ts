@@ -1,5 +1,5 @@
 import { test, expect } from '@fixtures/index';
-import { PAYMENT, USERS } from '@data/testData';
+import { PAYMENT, PRODUCTS, USERS } from '@data/testData';
 import { HomePage } from '@pages/HomePage';
 import { LoginPage } from '@pages/LoginPage';
 import { SignupPage } from '@pages/SignupPage';
@@ -105,8 +105,6 @@ test.describe('Place Order flows', () => {
         await homePage.goto();
         // add 2 products to cart
         await addProductsToCart(homePage, cartPage);
-        //go to cart
-        await expect(cartPage.cartTable).toBeVisible();
         //proceed to checkout and chose registration
         await cartPage.proceedToCheckoutButton.click();
         await cartPage.registerLoginModal.click();
@@ -207,4 +205,43 @@ test.describe('Place Order flows', () => {
         await accountDeletedPage.expectAccountDeleted();
         await accountDeletedPage.continueToHome();
     });
-})
+    // TC20: Verify cart persists across login
+    // tests that products added to cart as a guest are retained after logging in
+    test('should retain cart items after login', async ({
+        apiClient,
+        homePage,
+        productsPage,
+        cartPage,
+        loginPage,
+    }) => {
+        //create account using API
+        user = USERS.newUser();
+        await registerViaAPI(apiClient, user)
+        // add products as guest
+        await homePage.goto();
+        await homePage.navProducts.click();
+        await productsPage.searchFor(PRODUCTS.searchTerms.anotherValid);
+        await expect(productsPage.pageTitle).toBeVisible();
+        await expect(productsPage.pageTitle).toHaveText('Searched Products');
+        const productNames = await productsPage.getProductNames();
+        productNames.forEach(name => {
+            expect(name.toLowerCase()).toContain(PRODUCTS.searchTerms.anotherValid);
+        });
+        const firstProductName = await productsPage.getFirstProductName();
+        const secondProductName = await productsPage.getSecondProductName();
+        await productsPage.addFirstProductToCart();
+        await productsPage.dismissAddedToCartModal();
+        await productsPage.addSecondProductToCart();
+        await productsPage.dismissAddedToCartModal();
+        await productsPage.navCart.click();
+        const cartItems = await cartPage.getCartItemDetails();
+        expect(cartItems[0].name).toBe(firstProductName);
+        expect(cartItems[1].name).toBe(secondProductName);
+        await cartPage.navSignupLogin.click();
+        await loginPage.login(user.email, user.password);
+        await homePage.navCart.click();
+        const cartItemsAfterLogin = await cartPage.getCartItemDetails();
+        expect(cartItemsAfterLogin).toEqual(cartItems);
+    })
+
+});

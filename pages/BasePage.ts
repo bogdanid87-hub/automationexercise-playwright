@@ -19,6 +19,7 @@ export class BasePage {
   readonly subscriptionEmail: Locator;
   readonly subscriptionButton: Locator;
   readonly subscriptionSuccessMessage: Locator;
+  readonly navTestCases: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -34,6 +35,7 @@ export class BasePage {
     this.subscriptionEmail = page.locator('#susbscribe_email');
     this.subscriptionButton = page.locator('#subscribe');
     this.subscriptionSuccessMessage = page.locator('#success-subscribe');
+    this.navTestCases = page.getByRole('link', { name: 'Test Cases', exact: true })
   }
 
   async navigate(path: string = '/') {

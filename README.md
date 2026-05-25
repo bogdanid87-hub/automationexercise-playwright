@@ -31,12 +31,12 @@ This suite covers API tests, UI tests around authentication, products and contac
 | `tests/ui/contactus.spec.ts` | Contact Us | TC6 |
 | `tests/ui/products.spec.ts` | Products, search, cart interactions | TC8, TC9, TC12, TC13, TC17, TC18, TC19, TC21, TC22 |
 | `tests/ui/subscription.spec.ts` | Subscription | TC10, TC11 |
+| `tests/ui/testsPage.spec.ts` | Test Cases Page | TC7 |
 | `tests/e2e/api-assisted-purchase.spec.ts` | API-assisted purchase flow with UI validation and cross-layer assertions | - |
 | `tests/e2e/full-journey.spec.ts` | Full journey for purchase | TC14, TC15, TC16, TC20, TC23, TC24 |
 | `tests/visual` | Visual tests for 1st product details, login/signup, contactus, empty cart, cart with the 1st product | — |
 
 **To be added:**
-- TC7: Verify Test Cases Page
 - TC25: Scroll Up using Arrow button and Scroll Down
 - TC26: Scroll Up without Arrow button and Scroll Down
 

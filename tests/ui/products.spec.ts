@@ -3,7 +3,8 @@
 
 import { test, expect } from '../../fixtures/index';
 import { PRODUCTS } from '../../data/testData';
-import { USERS } from '../../data/testData';
+// import { USERS } from '../../data/testData';
+// import { HomePage } from '../../pages/HomePage';
 
 test.describe('Products', () => {
   // TC8: Verify All Products and product detail page
@@ -195,5 +196,4 @@ test.describe('Products', () => {
     const cartItems = await cartPage.getCartItemDetails();
     expect(cartItems[0].name).toBe(productName);
   });
-
 });   

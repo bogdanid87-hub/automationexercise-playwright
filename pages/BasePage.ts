@@ -20,6 +20,7 @@ export class BasePage {
   readonly subscriptionButton: Locator;
   readonly subscriptionSuccessMessage: Locator;
   readonly navTestCases: Locator;
+  readonly scrollUp: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -36,6 +37,7 @@ export class BasePage {
     this.subscriptionButton = page.locator('#subscribe');
     this.subscriptionSuccessMessage = page.locator('#success-subscribe');
     this.navTestCases = page.getByRole('link', { name: 'Test Cases', exact: true })
+    this.scrollUp = page.locator('#scrollUp');
   }
 
   async navigate(path: string = '/') {

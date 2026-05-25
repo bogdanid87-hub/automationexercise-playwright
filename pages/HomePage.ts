@@ -6,6 +6,7 @@ export class HomePage extends ProductListingPage {
   readonly homeCarousel: Locator;
   readonly recommendedCarousel: Locator;
   readonly recommendedTitle: Locator;
+  readonly homeHeading: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -13,6 +14,7 @@ export class HomePage extends ProductListingPage {
     this.homeCarousel = page.locator('#slider-carousel');
     this.recommendedTitle = page.getByRole('heading', { name: 'recommended items' });
     this.recommendedCarousel = page.locator('#recommended-item-carousel');
+    this.homeHeading = page.getByRole('heading', { name: 'Full-Fledged practice website' })
   }
   //loads the Home page and verifies it loaded correctly
   async goto() {
